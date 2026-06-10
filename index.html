@@ -7,347 +7,363 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
-/* ─── DESIGN TOKENS ─────────────────────── */
+/* ═══ DESIGN TOKENS ═══ */
 :root{
-  --or:#FF6E00;--or2:#FF8C2A;--or3:#FFF0E0;
-  --br:#3D1800;--br2:#6B3000;--br3:#A0522D;
+  --or:#FF6E00;--or2:#FF8C2A;--or3:#FFF0E0;--or4:#FFE4C4;
+  --br:#3D1800;--br2:#6B3000;--br3:#8B4513;
   --g50:#F9FAFB;--g100:#F3F4F6;--g200:#E5E7EB;--g300:#D1D5DB;
   --g400:#9CA3AF;--g500:#6B7280;--g700:#374151;--g900:#111827;
-  --red:#DC2626;--rp:#FEF2F2;--rp2:#FECACA;
-  --grn:#16A34A;--gp:#F0FDF4;--gp2:#BBF7D0;
-  --yel:#D97706;--yp:#FFFBEB;
-  --blu:#2563EB;--bp:#EFF6FF;
-  --sb:252px;--hh:56px;
-  --r:8px;--r2:12px;
-  --sh:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
-  --sh2:0 4px 16px rgba(0,0,0,.12);
+  --red:#DC2626;--rp:#FEF2F2;--rp2:#FCA5A5;
+  --grn:#16A34A;--gp:#F0FDF4;--gp2:#86EFAC;
+  --yel:#B45309;--yp:#FFFBEB;--yp2:#FDE68A;
+  --blu:#1D4ED8;--bp:#EFF6FF;--bp2:#BFDBFE;
+  --pur:#7C3AED;--pp:#F5F3FF;
+  --sb:244px;--hh:52px;
+  --rad:8px;--rad2:12px;
+  --sh:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);
+  --sh2:0 4px 20px rgba(0,0,0,.13);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased}
-html{font-size:14px}
-body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--g100);color:var(--g900);min-height:100vh;line-height:1.5}
+html,body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--g100);color:var(--g900);min-height:100vh;font-size:13px;line-height:1.5}
 
-/* ─── LAYOUT ─────────────────────────────── */
+/* ─── LAYOUT ─── */
 #app{display:flex;min-height:100vh}
-.sb{width:var(--sb);min-width:var(--sb);background:var(--br);display:flex;flex-direction:column;position:fixed;inset:0 auto 0 0;z-index:200;overflow-y:auto;overflow-x:hidden}
-.sb-brand{padding:16px;border-bottom:1px solid rgba(255,255,255,.08)}
-.sb-brand h1{font-size:13px;font-weight:800;color:var(--or);line-height:1.35;letter-spacing:.01em}
-.sb-brand p{font-size:10px;color:rgba(255,255,255,.35);margin-top:2px;font-weight:500}
-.sb-nav{flex:1;padding:8px 0}
-.sb-sec{padding:8px 14px 3px;font-size:9.5px;font-weight:700;text-transform:uppercase;color:rgba(255,255,255,.28);letter-spacing:.09em}
-.sb-item{display:flex;align-items:center;gap:8px;padding:8px 14px;color:rgba(255,255,255,.6);font-size:12.5px;font-weight:500;cursor:pointer;border-left:3px solid transparent;transition:all .13s;user-select:none;line-height:1.3}
-.sb-item:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.9)}
-.sb-item.on{background:rgba(255,110,0,.16);color:var(--or);border-left-color:var(--or);font-weight:600}
-.sb-item svg{width:14px;height:14px;flex-shrink:0;opacity:.8}
-.sb-foot{padding:10px 14px;border-top:1px solid rgba(255,255,255,.07);font-size:10px;color:rgba(255,255,255,.2);text-align:center}
-.main{margin-left:var(--sb);flex:1;display:flex;flex-direction:column;min-height:100vh;min-width:0}
-.topbar{height:var(--hh);background:#fff;border-bottom:1px solid var(--g200);display:flex;align-items:center;padding:0 20px;gap:10px;position:sticky;top:0;z-index:100;box-shadow:var(--sh)}
-.topbar-t{font-size:15px;font-weight:800;color:var(--br);flex-shrink:0}
-.topbar-s{font-size:11px;color:var(--g400);padding-left:2px}
+.sb{width:var(--sb);min-width:var(--sb);background:var(--br);display:flex;flex-direction:column;position:fixed;inset:0 auto 0 0;z-index:200;overflow-y:auto}
+.sb-brand{padding:14px 14px 12px;border-bottom:1px solid rgba(255,255,255,.08)}
+.sb-brand h1{font-size:12.5px;font-weight:800;color:var(--or);line-height:1.35}
+.sb-brand p{font-size:10px;color:rgba(255,255,255,.3);margin-top:1px}
+.sb-nav{flex:1;padding:6px 0}
+.sb-sec{padding:8px 13px 2px;font-size:9px;font-weight:700;text-transform:uppercase;color:rgba(255,255,255,.25);letter-spacing:.09em}
+.sb-item{display:flex;align-items:center;gap:7px;padding:7px 13px;color:rgba(255,255,255,.58);font-size:12px;font-weight:500;cursor:pointer;border-left:3px solid transparent;transition:all .12s;user-select:none}
+.sb-item:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.88)}
+.sb-item.on{background:rgba(255,110,0,.18);color:var(--or);border-left-color:var(--or);font-weight:600}
+.sb-item svg{width:13px;height:13px;flex-shrink:0}
+.sb-foot{padding:9px 14px;border-top:1px solid rgba(255,255,255,.07);font-size:9.5px;color:rgba(255,255,255,.18);text-align:center}
+.main{margin-left:var(--sb);flex:1;display:flex;flex-direction:column;min-width:0}
+.topbar{height:var(--hh);background:#fff;border-bottom:1px solid var(--g200);display:flex;align-items:center;padding:0 18px;gap:9px;position:sticky;top:0;z-index:100;box-shadow:var(--sh)}
+.tp-t{font-size:14px;font-weight:800;color:var(--br)}
+.tp-s{font-size:10.5px;color:var(--g400)}
 .sp{flex:1}
-.pg{padding:20px;flex:1}
-
-/* ─── PAGES ─────────────────────────────── */
+.pg{padding:18px;flex:1}
 .page{display:none}.page.on{display:block}
 
-/* ─── BUTTONS ─────────────────────────────── */
-.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:var(--r);font-size:12px;font-weight:600;cursor:pointer;border:none;outline:none;transition:all .13s;user-select:none;white-space:nowrap;line-height:1.4}
-.btn svg{width:13px;height:13px;flex-shrink:0}
+/* ─── BUTTONS ─── */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:var(--rad);font-size:11.5px;font-weight:600;cursor:pointer;border:none;outline:none;transition:all .12s;user-select:none;white-space:nowrap;line-height:1.4}
+.btn svg{width:12px;height:12px;flex-shrink:0}
 .btn-or{background:var(--or);color:#fff}.btn-or:hover{background:var(--or2)}
 .btn-br{background:var(--br);color:#fff}.btn-br:hover{background:var(--br2)}
-.btn-gh{background:transparent;color:var(--g500);border:1px solid var(--g200)}.btn-gh:hover{background:var(--g50);border-color:var(--g300)}
-.btn-red{background:var(--rp);color:var(--red)}.btn-red:hover{background:var(--rp2)}
+.btn-gh{background:transparent;color:var(--g500);border:1px solid var(--g200)}.btn-gh:hover{background:var(--g50)}
+.btn-red{background:var(--rp);color:var(--red)}.btn-red:hover{background:var(--rp2);color:#fff}
 .btn-grn{background:var(--gp);color:var(--grn)}.btn-grn:hover{background:var(--gp2)}
-.btn-yel{background:var(--yp);color:var(--yel)}.btn-yel:hover{opacity:.85}
-.btn-sm{padding:4px 9px;font-size:11px}
-.btn-lg{padding:9px 18px;font-size:13px}
-.btn:disabled{opacity:.38;cursor:not-allowed}
+.btn-yel{background:var(--yp);color:var(--yel)}.btn-yel:hover{background:var(--yp2)}
+.btn-pur{background:var(--pp);color:var(--pur)}.btn-pur:hover{opacity:.85}
+.btn-sm{padding:3px 8px;font-size:11px}
+.btn-lg{padding:8px 16px;font-size:12.5px}
+.btn:disabled{opacity:.35;cursor:not-allowed}
 
-/* ─── FORM ─────────────────────────────── */
-.fl{font-size:11px;font-weight:600;color:var(--g500);display:block;margin-bottom:3px}
-input[type=text],input[type=number],input[type=time],select,textarea{width:100%;padding:6px 10px;border:1px solid var(--g200);border-radius:var(--r);font-size:12.5px;outline:none;background:#fff;color:var(--g900);transition:border .13s;line-height:1.4}
-input:focus,select:focus,textarea:focus{border-color:var(--or);box-shadow:0 0 0 3px rgba(255,110,0,.1)}
-input[type=checkbox]{width:14px;height:14px;accent-color:var(--or);cursor:pointer;flex-shrink:0}
-input[type=color]{width:36px;height:28px;padding:2px 3px;border:1px solid var(--g200);border-radius:6px;cursor:pointer;background:#fff;outline:none}
-.fg{display:grid;gap:10px}
-.fg2{grid-template-columns:1fr 1fr}
-.fg3{grid-template-columns:1fr 1fr 1fr}
+/* ─── FORMS ─── */
+.fl{font-size:10.5px;font-weight:700;color:var(--g500);display:block;margin-bottom:2px}
+input[type=text],input[type=number],input[type=time],select,textarea{width:100%;padding:5px 9px;border:1px solid var(--g200);border-radius:var(--rad);font-size:12px;outline:none;background:#fff;color:var(--g900);transition:border .12s}
+input:focus,select:focus,textarea:focus{border-color:var(--or);box-shadow:0 0 0 2px rgba(255,110,0,.12)}
+input[type=checkbox]{width:13px;height:13px;accent-color:var(--or);cursor:pointer;flex-shrink:0}
+input[type=color]{width:34px;height:27px;padding:2px;border:1px solid var(--g200);border-radius:5px;cursor:pointer}
+.fg{display:grid;gap:9px}.fg2{grid-template-columns:1fr 1fr}.fg3{grid-template-columns:1fr 1fr 1fr}.fg4{grid-template-columns:1fr 1fr 1fr 1fr}
 
-/* ─── CARD ─────────────────────────────── */
-.card{background:#fff;border-radius:var(--r2);border:1px solid var(--g200);overflow:hidden;box-shadow:var(--sh)}
-.ch{padding:12px 16px;border-bottom:1px solid var(--g200);display:flex;align-items:center;gap:8px}
-.ch-t{font-size:13px;font-weight:700;color:var(--br);flex:1}
-.cb{padding:16px}
+/* ─── CARD ─── */
+.card{background:#fff;border-radius:var(--rad2);border:1px solid var(--g200);box-shadow:var(--sh);overflow:hidden}
+.ch{padding:10px 14px;border-bottom:1px solid var(--g200);display:flex;align-items:center;gap:7px;flex-wrap:wrap;gap-y:5px}
+.ch-t{font-size:12.5px;font-weight:700;color:var(--br);flex:1;min-width:0}
+.cb{padding:14px}
 
-/* ─── MODAL ─────────────────────────────── */
-.ov{position:fixed;inset:0;background:rgba(0,0,0,.48);z-index:900;display:flex;align-items:center;justify-content:center;padding:14px}
+/* ─── MODAL ─── */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:900;display:flex;align-items:center;justify-content:center;padding:12px}
 .ov.off{display:none}
-.modal{background:#fff;border-radius:14px;width:100%;max-width:580px;max-height:93vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25)}
-.mh{padding:14px 16px;border-bottom:1px solid var(--g200);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:1}
-.mh h3{font-size:14px;font-weight:700;color:var(--br)}
-.mclose{background:none;border:none;cursor:pointer;font-size:16px;color:var(--g400);padding:2px 6px;border-radius:5px;line-height:1}.mclose:hover{color:var(--g900);background:var(--g100)}
-.mb{padding:16px}
-.mf{padding:10px 16px;border-top:1px solid var(--g200);display:flex;justify-content:flex-end;gap:8px}
+.modal{background:#fff;border-radius:14px;width:100%;max-width:560px;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.28)}
+.mh{padding:12px 15px;border-bottom:1px solid var(--g200);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:1}
+.mh h3{font-size:13.5px;font-weight:700;color:var(--br)}
+.mc2{background:none;border:none;cursor:pointer;font-size:16px;color:var(--g400);padding:2px 5px;border-radius:4px;line-height:1}.mc2:hover{color:var(--g900)}
+.mb{padding:14px}.mf{padding:9px 15px;border-top:1px solid var(--g200);display:flex;justify-content:flex-end;gap:7px}
 
-/* ─── BADGE / TAG ─────────────────────────────── */
-.badge{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:20px;font-size:10.5px;font-weight:600}
+/* ─── BADGE ─── */
+.badge{display:inline-flex;align-items:center;gap:3px;padding:1px 6px;border-radius:20px;font-size:10px;font-weight:700}
 .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;display:inline-block}
-.tag{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:5px;font-size:10px;font-weight:700}
+.pri-core{background:#FEF3C7;color:#92400E}
+.pri-elec{background:#EDE9FE;color:#5B21B6}
+.pri-fill{background:#F0FDF4;color:#166534}
+.shf-mor{background:#DBEAFE;color:#1E40AF}
+.shf-aft{background:#FCE7F3;color:#9D174D}
+.shf-any{background:var(--g100);color:var(--g500)}
 
-/* ─── TABS ─────────────────────────────── */
-.tabs{display:flex;gap:2px;background:var(--g100);padding:2px;border-radius:9px;width:fit-content}
-.tab{padding:5px 13px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;color:var(--g500);transition:all .13s;border:none;background:none;user-select:none}
+/* ─── TABS ─── */
+.tabs{display:flex;gap:2px;background:var(--g100);padding:2px;border-radius:8px;width:fit-content}
+.tab{padding:4px 12px;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;color:var(--g500);transition:all .12s;border:none;background:none;user-select:none}
 .tab.on{background:#fff;color:var(--br);box-shadow:0 1px 3px rgba(0,0,0,.1)}
 
-/* ─── STATS ─────────────────────────────── */
-.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:16px}
-.stat{background:#fff;border-radius:var(--r2);border:1px solid var(--g200);padding:12px 14px;box-shadow:var(--sh)}
-.sv{font-size:24px;font-weight:800;color:var(--or);line-height:1}
-.sl{font-size:10.5px;color:var(--g400);margin-top:2px;font-weight:500}
+/* ─── STATS ─── */
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:9px;margin-bottom:14px}
+.stat{background:#fff;border-radius:var(--rad2);border:1px solid var(--g200);padding:10px 12px;box-shadow:var(--sh)}
+.sv{font-size:22px;font-weight:800;color:var(--or);line-height:1}
+.sl{font-size:10px;color:var(--g400);margin-top:2px;font-weight:500}
 
-/* ─── ALERT ─────────────────────────────── */
-.alert{padding:8px 12px;border-radius:var(--r);font-size:11.5px;font-weight:500;display:flex;align-items:flex-start;gap:7px;line-height:1.45}
-.ai{background:var(--bp);color:var(--blu)}
-.as{background:var(--gp);color:var(--grn)}
-.aw{background:var(--yp);color:var(--yel)}
-.ae{background:var(--rp);color:var(--red)}
+/* ─── ALERT ─── */
+.alert{padding:7px 11px;border-radius:var(--rad);font-size:11.5px;font-weight:500;display:flex;align-items:flex-start;gap:6px;line-height:1.45}
+.ai{background:var(--bp);color:var(--blu)}.as{background:var(--gp);color:var(--grn)}
+.aw{background:var(--yp);color:var(--yel)}.ae{background:var(--rp);color:var(--red)}
 
-/* ─── PROGRESS ─────────────────────────────── */
-.prog{height:4px;background:var(--g200);border-radius:3px;overflow:hidden}
-.pf{height:100%;border-radius:3px;transition:width .3s}
-
-/* ─── TOAST ─────────────────────────────── */
-#tc{position:fixed;bottom:16px;right:16px;z-index:9999;display:flex;flex-direction:column-reverse;gap:6px;pointer-events:none}
-.toast{background:var(--br);color:#fff;padding:8px 14px;border-radius:9px;font-size:12px;box-shadow:var(--sh2);animation:tIn .18s ease;max-width:280px;pointer-events:all}
+/* ─── TOAST ─── */
+#tc{position:fixed;bottom:14px;right:14px;z-index:9999;display:flex;flex-direction:column-reverse;gap:5px;pointer-events:none}
+.toast{background:var(--br);color:#fff;padding:7px 13px;border-radius:8px;font-size:11.5px;box-shadow:var(--sh2);animation:tIn .17s ease;max-width:270px;pointer-events:all}
 .ts{background:var(--grn)}.tw{background:var(--yel)}.te{background:var(--red)}
-@keyframes tIn{from{transform:translateX(40px);opacity:0}to{transform:none;opacity:1}}
+@keyframes tIn{from{transform:translateX(36px);opacity:0}to{transform:none;opacity:1}}
 
-/* ─── TEACHER CARD ─────────────────────────────── */
-.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
-.tcard{background:#fff;border-radius:var(--r2);border:1px solid var(--g200);overflow:hidden;box-shadow:var(--sh);transition:box-shadow .2s}
-.tcard:hover{box-shadow:var(--sh2)}
-.tc-top{padding:12px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--g200)}
-.ava{width:40px;height:40px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;flex-shrink:0}
-.tc-info{flex:1;min-width:0}
-.tc-name{font-size:13px;font-weight:700;color:var(--br)}
-.tc-meta{font-size:10.5px;color:var(--g400);margin-top:1px}
-.tc-body{padding:10px 14px}
+/* ─── WORKLOAD MATRIX ─── */
+.wl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.wl-tbl{border-collapse:collapse;font-size:11px;white-space:nowrap}
+.wl-tbl th{padding:5px 8px;background:var(--br);color:#fff;border:1px solid var(--br2);font-weight:700;text-align:center;position:sticky;top:0;z-index:3}
+.wl-tbl th:first-child{position:sticky;left:0;z-index:4;background:var(--br);min-width:130px}
+.wl-tbl td{border:1px solid var(--g200);padding:2px 3px;text-align:center;vertical-align:middle}
+.wl-tbl td:first-child{position:sticky;left:0;background:#fff;font-weight:600;font-size:11px;padding:4px 7px;text-align:left;z-index:2;border-right:2px solid var(--g200)}
+.wl-tbl tr:nth-child(even) td{background:var(--g50)}
+.wl-tbl tr:nth-child(even) td:first-child{background:var(--g50)}
+.wl-input{width:46px;border:1px solid var(--g200);border-radius:4px;text-align:center;padding:3px;font-size:11px;background:#fff}
+.wl-input:focus{border-color:var(--or);outline:none}
 
-/* ─── ASSIGNMENT ROW ─────────────────────────────── */
-.asgn-row{display:grid;grid-template-columns:1fr 90px 80px 60px 24px;gap:5px;align-items:center;padding:5px 0;border-bottom:1px solid var(--g100)}
-.asgn-row:last-child{border-bottom:none}
-.asgn-hdr{display:grid;grid-template-columns:1fr 90px 80px 60px 24px;gap:5px;padding:4px 0;border-bottom:1px solid var(--g200);font-size:10px;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:.05em}
-
-/* ─── CONSTRAINT MATRIX ─────────────────────────────── */
-.mx-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
-.mx{border-collapse:collapse}
-.mx th{padding:4px 7px;font-size:10.5px;font-weight:700;color:var(--g500);text-align:center;background:var(--g50);white-space:nowrap}
-.mx td{padding:2px}
-.mx .pl{font-size:10.5px;font-weight:700;color:var(--br);padding:3px 8px;white-space:nowrap;text-align:right;min-width:76px;line-height:1.3}
-.mx .pl small{display:block;font-size:9px;color:var(--g400);font-weight:400}
-.mc{width:42px;height:28px;border-radius:5px;border:1px solid var(--g200);background:#fff;cursor:pointer;transition:all .11s;display:flex;align-items:center;justify-content:center;margin:auto;font-size:10px}
-.mc:hover{border-color:var(--or)}
-.mc.bl{background:var(--br);border-color:var(--br);color:rgba(255,255,255,.9)}
-.mc.bl::after{content:'✕';font-size:10px}
-
-/* ─── TIMETABLE GRID ─────────────────────────────── */
-.tt-outer{overflow-x:auto;overflow-y:visible;-webkit-overflow-scrolling:touch}
+/* ─── TIMETABLE GRID ─── */
+.tt-outer{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .tt{border-collapse:collapse;table-layout:fixed;min-width:100%}
-.tt th{padding:5px 4px;font-size:10.5px;font-weight:700;color:#fff;background:var(--br);text-align:center;white-space:nowrap;border:1px solid rgba(255,255,255,.1);position:sticky;top:0;z-index:5;min-width:100px}
-.tt th:first-child{min-width:82px;background:var(--br2)}
+.tt th{padding:4px 3px;font-size:10.5px;font-weight:700;color:#fff;background:var(--br);text-align:center;white-space:nowrap;border:1px solid rgba(255,255,255,.12);position:sticky;top:0;z-index:5}
+.tt th:first-child{min-width:80px;background:var(--br2)}
 .tt td{border:1px solid var(--g200);padding:2px;vertical-align:top}
-.pcell{padding:5px 7px;font-size:10.5px;font-weight:700;color:var(--br);background:var(--or3);white-space:nowrap;text-align:center;line-height:1.3;vertical-align:middle!important}
-.pcell small{display:block;font-size:9px;font-weight:400;color:var(--br3);margin-top:1px}
-.slot{min-height:46px;border-radius:6px;cursor:pointer;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:4px 6px;font-size:11px;position:relative;gap:1px;transition:filter .12s}
-.slot.emp{background:var(--g50);border:1px dashed var(--g300);color:var(--g400);align-items:center;justify-content:center;font-size:18px;font-weight:300}
+.pcell{padding:4px 6px;font-size:10px;font-weight:700;color:var(--br);background:var(--or3);text-align:center;line-height:1.3;white-space:nowrap;vertical-align:middle!important}
+.pcell small{display:block;font-size:8.5px;font-weight:400;color:var(--br3);margin-top:1px}
+.lunch-row td{background:linear-gradient(135deg,#FFF8DC,#FFEAA0);text-align:center;font-size:10px;font-weight:700;color:#8B6914;padding:5px;letter-spacing:.02em;border:1px solid #F0D060}
+.slot{min-height:44px;border-radius:5px;cursor:pointer;display:flex;flex-direction:column;justify-content:center;padding:3px 5px;font-size:10.5px;position:relative;gap:1px;transition:filter .11s,box-shadow .11s}
+.slot.emp{background:var(--g50);border:1px dashed var(--g300);color:var(--g400);align-items:center;justify-content:center;font-size:16px}
 .slot.emp:hover{background:#fff;border-color:var(--or);color:var(--or)}
 .slot.fill{border:1px solid transparent}
 .slot.fill:hover{filter:brightness(.9)}
-.slot.lim{background:var(--g200);opacity:.45;cursor:not-allowed;align-items:center;justify-content:center;font-size:9px;color:var(--g500)}
-.s-sub{font-weight:700;font-size:10.5px;line-height:1.25;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.s-tch{font-size:9.5px;opacity:.78;line-height:1.2;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.s-del{position:absolute;top:2px;right:2px;width:13px;height:13px;border-radius:50%;background:rgba(0,0,0,.22);color:#fff;display:none;align-items:center;justify-content:center;font-size:8.5px;cursor:pointer;z-index:1;line-height:1}
+.slot.lim{background:var(--g100);opacity:.4;cursor:default;align-items:center;justify-content:center;font-size:9px;color:var(--g500)}
+.slot.conflict{animation:blink .5s infinite;border:2px solid var(--red)!important}
+@keyframes blink{0%,100%{box-shadow:0 0 0 0 rgba(220,38,38,.4)}50%{box-shadow:0 0 0 3px rgba(220,38,38,.3)}}
+.s-sub{font-weight:700;font-size:10.5px;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.s-tch{font-size:9.5px;opacity:.75;line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.s-del{position:absolute;top:1px;right:1px;width:12px;height:12px;border-radius:50%;background:rgba(0,0,0,.22);color:#fff;display:none;align-items:center;justify-content:center;font-size:8px;cursor:pointer;z-index:1}
 .slot:hover .s-del{display:flex}
-.dbl{display:inline-flex;align-items:center;padding:0 3px;border-radius:3px;font-size:8.5px;font-weight:700;background:rgba(0,0,0,.14);vertical-align:middle;margin-left:2px}
+.dbl{display:inline-flex;align-items:center;padding:0 3px;border-radius:3px;font-size:8px;font-weight:700;background:rgba(0,0,0,.15);vertical-align:middle;margin-left:2px}
+.pri-dot-core::before{content:'★';font-size:8px;opacity:.7;margin-right:1px}
+.pri-dot-fill::before{content:'◦';font-size:10px;margin-right:1px}
 
-/* ─── POPUP ─────────────────────────────── */
+/* ─── POPUP ─── */
 .pop-bg{position:fixed;inset:0;z-index:400}
-.pop{position:fixed;z-index:401;background:#fff;border-radius:11px;border:1px solid var(--g200);box-shadow:0 8px 32px rgba(0,0,0,.16);width:222px;padding:10px;max-height:380px;overflow-y:auto}
-.pop h4{font-size:11px;font-weight:700;color:var(--br);margin-bottom:6px;line-height:1.3}
-.popt{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:6px;cursor:pointer;font-size:11.5px;color:var(--g900);transition:background .11s}
+.pop{position:fixed;z-index:401;background:#fff;border-radius:10px;border:1px solid var(--g200);box-shadow:var(--sh2);width:218px;padding:9px;max-height:370px;overflow-y:auto}
+.pop h4{font-size:10.5px;font-weight:700;color:var(--br);margin-bottom:5px;line-height:1.3}
+.popt{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:5px;cursor:pointer;font-size:11px;color:var(--g900);transition:background .1s}
 .popt:hover{background:var(--or3)}
-.popt.dis{opacity:.34;cursor:not-allowed;pointer-events:none}
-.popt-sep{height:1px;background:var(--g200);margin:4px 0}
+.popt.dis{opacity:.32;cursor:not-allowed;pointer-events:none}
+.popt-sep{height:1px;background:var(--g200);margin:3px 0}
 
-/* ─── CLASS GRID ─────────────────────────────── */
-.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
-.ccard{background:#fff;border-radius:var(--r2);border:1px solid var(--g200);padding:12px;box-shadow:var(--sh)}
-.cnum{width:44px;height:44px;border-radius:10px;background:var(--or);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;margin-bottom:8px}
+/* ─── CONSTRAINT MATRIX ─── */
+.mx{border-collapse:collapse}
+.mx th{padding:3px 6px;font-size:10px;font-weight:700;color:var(--g500);text-align:center;background:var(--g50);white-space:nowrap}
+.mx td{padding:2px}
+.mx .mxpl{font-size:10px;font-weight:700;color:var(--br);padding:2px 7px;white-space:nowrap;text-align:right;min-width:70px;line-height:1.3}
+.mx .mxpl small{display:block;font-size:8.5px;color:var(--g400);font-weight:400}
+.mxc{width:40px;height:26px;border-radius:4px;border:1px solid var(--g200);background:#fff;cursor:pointer;transition:all .1s;display:flex;align-items:center;justify-content:center;margin:auto;font-size:9px}
+.mxc:hover{border-color:var(--or)}
+.mxc.bl{background:var(--br);border-color:var(--br);color:rgba(255,255,255,.85)}
+.mxc.bl::after{content:'✕';font-size:9px}
 
-/* ─── VIEW TABLE ─────────────────────────────── */
+/* ─── TEACHER CARDS ─── */
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:11px}
+.tcard{background:#fff;border-radius:var(--rad2);border:1px solid var(--g200);box-shadow:var(--sh);overflow:hidden}
+.tc-top{padding:10px 12px;display:flex;align-items:center;gap:9px;border-bottom:1px solid var(--g100)}
+.ava{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;flex-shrink:0}
+.tc-body{padding:9px 12px}
+
+/* ─── FAIL LOG ─── */
+.fail-wrap{background:var(--rp);border:1px solid var(--rp2);border-radius:var(--rad2);padding:11px 13px;margin-bottom:12px}
+.fail-wrap h4{font-size:12px;font-weight:700;color:var(--red);margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.fail-item{display:grid;grid-template-columns:auto auto auto 1fr;gap:5px 10px;align-items:center;padding:4px 0;border-bottom:1px solid rgba(220,38,38,.12);font-size:11px;color:var(--red)}
+.fail-item:last-child{border-bottom:none}
+
+/* ─── PROGRESS ─── */
+.prog{height:4px;background:var(--g200);border-radius:2px;overflow:hidden}
+.pf{height:100%;border-radius:2px;transition:width .3s}
+
+/* ─── GEN BANNER ─── */
+.gbanner{background:linear-gradient(135deg,var(--br),var(--br2));border-radius:var(--rad2);padding:16px;display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.gicon{width:44px;height:44px;background:rgba(255,110,0,.22);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.gtext{flex:1;color:#fff}.gtext h2{font-size:13.5px;font-weight:700}.gtext p{font-size:10px;opacity:.65;margin-top:1px}
+
+/* ─── VIEW ─── */
 .vtbl{border-collapse:collapse;width:100%}
-.vtbl th{padding:7px 10px;font-size:10.5px;font-weight:700;background:var(--or3);color:var(--br);border:1px solid var(--g200);text-align:left}
-.vtbl td{padding:6px 10px;border:1px solid var(--g200);font-size:11.5px;vertical-align:middle}
+.vtbl th{padding:6px 9px;font-size:10.5px;font-weight:700;background:var(--or3);color:var(--br);border:1px solid var(--g200)}
+.vtbl td{padding:5px 9px;border:1px solid var(--g200);font-size:11px;vertical-align:middle}
 .vtbl tr:nth-child(even) td{background:var(--g50)}
 
-/* ─── GEN BANNER ─────────────────────────────── */
-.gbanner{background:linear-gradient(135deg,var(--br) 0%,var(--br2) 100%);border-radius:12px;padding:18px;display:flex;align-items:center;gap:14px;margin-bottom:16px}
-.gicon{width:46px;height:46px;background:rgba(255,110,0,.22);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.gtext{flex:1;color:#fff}.gtext h2{font-size:14px;font-weight:700}.gtext p{font-size:10.5px;opacity:.68;margin-top:2px}
-
-/* ─── SETTINGS DAY CHECKS ─────────────────────────────── */
-.dchks{display:flex;flex-wrap:wrap;gap:6px}
-.dchk{display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;border:1px solid var(--g200);cursor:pointer;font-size:11.5px;font-weight:600;color:var(--g500);transition:all .13s;user-select:none}
+/* ─── SETTINGS DAYS ─── */
+.dchks{display:flex;flex-wrap:wrap;gap:5px}
+.dchk{display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;border:1px solid var(--g200);cursor:pointer;font-size:11.5px;font-weight:600;color:var(--g500);transition:all .12s;user-select:none}
 .dchk.on{background:var(--or3);border-color:var(--or);color:var(--or)}
 .dchk input{display:none}
-.pt-row{display:grid;grid-template-columns:50px 1fr 12px 1fr;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--g100)}
-.pt-row:last-child{border-bottom:none}
-.pt-lbl{font-size:11.5px;font-weight:700;color:var(--br)}
+.pt-grid{display:grid;grid-template-columns:44px 1fr 10px 1fr;align-items:center;gap:7px;padding:4px 0;border-bottom:1px solid var(--g100)}
+.pt-grid:last-child{border-bottom:none}
 
-/* ─── FAIL LOG ─────────────────────────────── */
-.fail-log{background:var(--rp);border:1px solid var(--rp2);border-radius:var(--r2);padding:12px 14px;margin-bottom:14px}
-.fail-log h4{font-size:12px;font-weight:700;color:var(--red);margin-bottom:6px}
-.fail-log ul{padding-left:16px}
-.fail-log li{font-size:11.5px;color:var(--red);margin-bottom:3px;line-height:1.45}
+/* ─── SUBJECT TABLE ─── */
+.stbl{width:100%;border-collapse:collapse}
+.stbl th{padding:7px 10px;font-size:10.5px;font-weight:700;color:var(--g500);text-align:left;background:var(--g50);border-bottom:1px solid var(--g200)}
+.stbl td{padding:6px 10px;border-bottom:1px solid var(--g200);font-size:11.5px;vertical-align:middle}
+.stbl tr:hover td{background:var(--g50)}
+.stbl tr:last-child td{border-bottom:none}
 
-/* ─── MISC ─────────────────────────────── */
-.sep{border:none;border-top:1px solid var(--g200);margin:12px 0}
-.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.empty{text-align:center;padding:40px 20px;color:var(--g400)}
-.empty svg{width:40px;height:40px;margin:0 auto 8px;opacity:.3;display:block}
+/* ─── MISC ─── */
+.sep{border:none;border-top:1px solid var(--g200);margin:11px 0}
+.row{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.empty{text-align:center;padding:38px 20px;color:var(--g400)}
+.empty svg{width:38px;height:38px;margin:0 auto 8px;opacity:.3;display:block}
 .empty h3{font-size:13px;font-weight:700;color:var(--g500);margin-bottom:3px}
-.empty p{font-size:11px}
-::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--g300);border-radius:8px}
-@media(max-width:680px){.sb{transform:translateX(-100%)}.main{margin-left:0}.fg2,.fg3{grid-template-columns:1fr}}
+::-webkit-scrollbar-thumb{background:var(--g300);border-radius:6px}
+@media print{.sb,.topbar,#tc{display:none!important}.main{margin-left:0!important}}
+@media(max-width:660px){.sb{transform:translateX(-100%)}.main{margin-left:0}.fg2,.fg3,.fg4{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div id="app">
-<!-- ── SIDEBAR ── -->
+<!-- ═══ SIDEBAR ═══ -->
 <aside class="sb">
   <div class="sb-brand">
-    <h1>Zamaxshariy<br>Izdoshlari</h1>
+    <h1>Zamaxshariy Izdoshlari</h1>
     <p>Xususiy Maktab · Admin Panel</p>
   </div>
   <nav class="sb-nav" id="sb-nav">
     <div class="sb-sec">Umumiy</div>
-    <div class="sb-item on" data-p="dash"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Bosh sahifa</div>
+    <div class="sb-item on" data-p="dash">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Bosh sahifa</div>
     <div class="sb-sec">Sozlamalar</div>
-    <div class="sb-item" data-p="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Maktab sozlamalari</div>
+    <div class="sb-item" data-p="settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Maktab sozlamalari</div>
     <div class="sb-sec">Ma'lumotlar</div>
-    <div class="sb-item" data-p="teachers"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>O'qituvchilar</div>
-    <div class="sb-item" data-p="classes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Sinflar</div>
+    <div class="sb-item" data-p="subjects">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Fanlar bazasi</div>
+    <div class="sb-item" data-p="teachers">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>O'qituvchilar</div>
+    <div class="sb-item" data-p="classes">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Sinflar</div>
+    <div class="sb-item" data-p="workload">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>Soat yuklamasi</div>
     <div class="sb-sec">Jadval</div>
-    <div class="sb-item" data-p="timetable"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Jadval yaratish</div>
-    <div class="sb-item" data-p="view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Ko'rish & Eksport</div>
+    <div class="sb-item" data-p="timetable">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Jadval yaratish</div>
+    <div class="sb-item" data-p="view">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Ko'rish & Eksport</div>
   </nav>
   <div class="sb-foot">© 2025 Zamaxshariy Izdoshlari</div>
 </aside>
 
-<!-- ── MAIN ── -->
+<!-- ═══ MAIN ═══ -->
 <main class="main">
   <header class="topbar">
-    <span class="topbar-t" id="pg-t">Bosh sahifa</span>
-    <span class="topbar-s" id="pg-s"></span>
+    <span class="tp-t" id="pg-t">Bosh sahifa</span>
+    <span class="tp-s" id="pg-s"></span>
     <div class="sp"></div>
     <div id="pg-acts"></div>
   </header>
   <div class="pg">
-
-    <!-- DASH -->
     <div class="page on" id="page-dash"></div>
-
-    <!-- SETTINGS -->
     <div class="page" id="page-settings"></div>
-
-    <!-- TEACHERS -->
+    <div class="page" id="page-subjects">
+      <div class="row" style="justify-content:space-between;margin-bottom:11px">
+        <div class="tabs" id="subj-tabs"><button class="tab on" onclick="subjTab('list')">Fan ro'yxati</button><button class="tab" onclick="subjTab('add')">+ Yangi fan</button></div>
+        <div class="row" id="subj-top-acts"></div>
+      </div>
+      <div id="subj-pane"></div>
+    </div>
     <div class="page" id="page-teachers">
-      <div class="row" style="justify-content:space-between;margin-bottom:12px">
-        <div class="tabs" id="t-tabs">
-          <button class="tab on" onclick="tTab('list')">O'qituvchilar</button>
-          <button class="tab" onclick="tTab('matrix')">Bandlik matritsasi</button>
-        </div>
+      <div class="row" style="justify-content:space-between;margin-bottom:11px">
+        <div class="tabs" id="t-tabs"><button class="tab on" onclick="tTab('list')">O'qituvchilar</button><button class="tab" onclick="tTab('matrix')">Bandlik matritsasi</button></div>
         <button class="btn btn-or" onclick="openTM()">+ O'qituvchi qo'shish</button>
       </div>
-      <div id="t-list"></div>
-      <div id="t-matrix" style="display:none"></div>
+      <div id="t-list"></div><div id="t-matrix" style="display:none"></div>
     </div>
-
-    <!-- CLASSES -->
     <div class="page" id="page-classes">
-      <div class="row" style="justify-content:space-between;margin-bottom:12px">
-        <span style="font-size:14px;font-weight:700;color:var(--br)">Sinflar</span>
+      <div class="row" style="justify-content:space-between;margin-bottom:11px">
+        <span style="font-size:13.5px;font-weight:700;color:var(--br)">Sinflar</span>
         <button class="btn btn-or" onclick="openCM()">+ Sinf qo'shish</button>
       </div>
-      <div class="cgrid" id="cgrid"></div>
+      <div id="cgrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px"></div>
     </div>
-
-    <!-- TIMETABLE -->
-    <div class="page" id="page-timetable">
-      <div class="gbanner">
-        <div class="gicon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FF6E00" stroke-width="2.2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
-        <div class="gtext"><h2>Avtomatik jadval yaratish</h2><p>Backtracking + Reshuffle algoritmi · Barcha cheklovlar hisobga olinadi</p></div>
-        <div class="row" style="gap:6px;flex-shrink:0">
-          <button class="btn btn-or btn-lg" id="gen-btn" onclick="runGen()">⚡ Yaratish</button>
-          <button class="btn btn-red" onclick="clearTT()">🗑 Tozalash</button>
+    <div class="page" id="page-workload">
+      <div class="row" style="justify-content:space-between;margin-bottom:11px">
+        <span style="font-size:13.5px;font-weight:700;color:var(--br)">Soat Yuklamasi Matritsasi</span>
+        <div class="row">
+          <button class="btn btn-gh" onclick="clearWorkload()">↺ Tozalash</button>
+          <button class="btn btn-or" onclick="saveWorkload()">💾 Saqlash</button>
         </div>
       </div>
-      <div id="gen-result"></div>
-      <!-- day filter -->
-      <div class="row" style="margin-bottom:10px">
-        <span style="font-size:11.5px;font-weight:600;color:var(--g500)">Kun:</span>
+      <div class="alert ai" style="margin-bottom:10px">
+        Har bir Fan × Sinf kesishmasiga haftalik dars soatini kiriting. 0 yoki bo'sh = dars yo'q.
+      </div>
+      <div class="card"><div class="cb" style="padding:0;overflow-x:auto"><div id="wl-wrap"></div></div></div>
+    </div>
+    <div class="page" id="page-timetable">
+      <div class="gbanner">
+        <div class="gicon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF6E00" stroke-width="2.2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <div class="gtext"><h2>3-bosqichli Backtracking + Reshuffle algoritmi</h2><p>Asosiy → Qo'shimcha → Zaxira · Cheklovlar · Kunora/Ketma-ket · Tushlik separator</p></div>
+        <div class="row" style="flex-shrink:0">
+          <button class="btn btn-or btn-lg" id="gen-btn" onclick="runGen()">⚡ Yaratish</button>
+          <button class="btn btn-red" onclick="clearTT()">🗑</button>
+        </div>
+      </div>
+      <div id="gen-log"></div>
+      <div class="row" style="margin-bottom:9px">
+        <span style="font-size:11px;font-weight:600;color:var(--g500)">Kun:</span>
         <div class="tabs" id="tt-days"></div>
       </div>
-      <div class="card" style="overflow:hidden">
-        <div class="tt-outer" id="tt-wrap"></div>
-      </div>
+      <div class="card" style="overflow:hidden"><div class="tt-outer" id="tt-wrap"></div></div>
     </div>
-
-    <!-- VIEW -->
     <div class="page" id="page-view">
-      <div class="tabs" id="v-tabs" style="margin-bottom:12px">
+      <div class="tabs" id="v-tabs" style="margin-bottom:11px">
         <button class="tab on" onclick="setVM('master')">Umumiy</button>
-        <button class="tab" onclick="setVM('class')">Sinf bo'yicha</button>
-        <button class="tab" onclick="setVM('teacher')">O'qituvchi bo'yicha</button>
+        <button class="tab" onclick="setVM('class')">Sinf</button>
+        <button class="tab" onclick="setVM('teacher')">O'qituvchi</button>
       </div>
-      <div id="v-filter" class="row" style="margin-bottom:10px"></div>
-      <div class="row" style="margin-bottom:14px">
+      <div id="v-filter" class="row" style="margin-bottom:9px"></div>
+      <div class="row" style="margin-bottom:12px">
         <button class="btn btn-br" onclick="expPDF()">📄 PDF</button>
         <button class="btn btn-grn" onclick="expXLS()">📊 Excel</button>
+        <button class="btn btn-yel" onclick="window.print()">🖨 Chop etish</button>
       </div>
       <div id="v-body"></div>
     </div>
-
   </div>
 </main>
 </div>
 
-<!-- ── MODALS ── -->
+<!-- ═══ MODALS ═══ -->
 <!-- Teacher Modal -->
 <div class="ov off" id="m-t">
-  <div class="modal" style="max-width:620px">
-    <div class="mh"><h3 id="m-t-title">O'qituvchi qo'shish</h3><button class="mclose" onclick="closeM('m-t')">✕</button></div>
+  <div class="modal" style="max-width:600px">
+    <div class="mh"><h3 id="m-t-ti">O'qituvchi qo'shish</h3><button class="mc2" onclick="closeM('m-t')">✕</button></div>
     <div class="mb">
-      <div class="fg fg2" style="margin-bottom:12px">
+      <div class="fg fg2" style="margin-bottom:10px">
         <div><label class="fl">Ism Familiya *</label><input id="t-n" type="text" placeholder="Aziz Karimov"/></div>
-        <div class="row" style="gap:10px;align-items:flex-end">
-          <div style="flex:1"><label class="fl">Rang</label><input id="t-c" type="color" value="#FF6E00" style="width:100%;height:34px"/></div>
-          <div style="flex:2"><label class="fl">Taqsimlash</label>
-            <select id="t-p"><option value="alternate">🔀 Kunora</option><option value="consecutive">📅 Ketma-ket</option></select>
-          </div>
+        <div class="row" style="align-items:flex-end;gap:8px">
+          <div style="flex:0 0 auto"><label class="fl">Rang</label><input id="t-c" type="color" value="#FF6E00" style="width:56px;height:32px"/></div>
+          <div style="flex:1"><label class="fl">Pacing</label>
+            <select id="t-p"><option value="alt">🔀 Kunora</option><option value="cons">📅 Ketma-ket</option></select></div>
         </div>
       </div>
-      <!-- Assignments -->
-      <div style="margin-top:4px">
-        <div class="row" style="justify-content:space-between;margin-bottom:6px">
-          <span style="font-size:11.5px;font-weight:700;color:var(--br)">Dars yuklamasi (Fan → Sinf)</span>
-          <button class="btn btn-gh btn-sm" onclick="addAsgnRow()">+ Qo'shish</button>
+      <div>
+        <div class="row" style="justify-content:space-between;margin-bottom:5px">
+          <span style="font-size:11.5px;font-weight:700;color:var(--br)">Fanlar biriktirilishi</span>
+          <button class="btn btn-gh btn-sm" onclick="addSubjRow()">+ Qo'shish</button>
         </div>
-        <div class="asgn-hdr" style="padding:3px 0">
-          <span>Fan nomi</span><span>Sinf</span><span>Soat/hafta</span><span>2-soat</span><span></span>
+        <div style="display:grid;grid-template-columns:1fr 50px;gap:4px;padding:3px 0;border-bottom:1px solid var(--g200);font-size:10px;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:.05em">
+          <span>Fan nomi</span><span style="text-align:center">O'chir</span>
         </div>
-        <div id="asgn-rows"></div>
+        <div id="t-subj-rows"></div>
       </div>
     </div>
     <div class="mf">
@@ -357,16 +373,15 @@ input[type=color]{width:36px;height:28px;padding:2px 3px;border:1px solid var(--
     <input type="hidden" id="t-eid"/>
   </div>
 </div>
-
 <!-- Class Modal -->
 <div class="ov off" id="m-c">
-  <div class="modal" style="max-width:380px">
-    <div class="mh"><h3 id="m-c-title">Sinf</h3><button class="mclose" onclick="closeM('m-c')">✕</button></div>
+  <div class="modal" style="max-width:360px">
+    <div class="mh"><h3>Sinf</h3><button class="mc2" onclick="closeM('m-c')">✕</button></div>
     <div class="mb">
-      <div class="fg" style="gap:10px">
+      <div class="fg" style="gap:9px">
         <div><label class="fl">Sinf nomi *</label><input id="c-n" type="text" placeholder="5A"/></div>
-        <div><label class="fl">Kunlik max dars soati <span style="color:var(--g400)">(bo'sh = umumiy)</span></label>
-          <input id="c-mp" type="number" min="1" max="12" placeholder="Umumiy sozlamadan olinadi"/></div>
+        <div><label class="fl">Kunlik max dars soati <span style="color:var(--g400)">(ixtiyoriy)</span></label>
+          <input id="c-mp" type="number" min="1" max="12" placeholder="Umumiy sozlamadan"/></div>
       </div>
     </div>
     <div class="mf">
@@ -376,100 +391,147 @@ input[type=color]{width:36px;height:28px;padding:2px 3px;border:1px solid var(--
     <input type="hidden" id="c-eid"/>
   </div>
 </div>
-
-<!-- Popup bg -->
+<!-- Subject Modal -->
+<div class="ov off" id="m-s">
+  <div class="modal" style="max-width:440px">
+    <div class="mh"><h3 id="m-s-ti">Fan qo'shish</h3><button class="mc2" onclick="closeM('m-s')">✕</button></div>
+    <div class="mb">
+      <div class="fg fg2" style="gap:9px;margin-bottom:9px">
+        <div><label class="fl">Fan nomi *</label><input id="s-n" type="text" placeholder="Matematika"/></div>
+        <div><label class="fl">Rang</label><input id="s-c" type="color" value="#3B82F6" style="width:100%;height:32px"/></div>
+      </div>
+      <div class="fg fg2" style="gap:9px;margin-bottom:9px">
+        <div><label class="fl">Ustuvorlik *</label>
+          <select id="s-pri">
+            <option value="core">⭐ Asosiy (Core)</option>
+            <option value="elec">📘 Qo'shimcha (Elective)</option>
+            <option value="fill">◦ Zaxira (Filler)</option>
+          </select>
+        </div>
+        <div><label class="fl">Qism *</label>
+          <select id="s-sh">
+            <option value="any">🔄 Ahamiyatsiz</option>
+            <option value="mor">🌅 1-qism (1–4 soat)</option>
+            <option value="aft">🌆 2-qism (5–8 soat)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="mf">
+      <button class="btn btn-gh" onclick="closeM('m-s')">Bekor</button>
+      <button class="btn btn-or" onclick="saveSubject()">Saqlash</button>
+    </div>
+    <input type="hidden" id="s-eid"/>
+  </div>
+</div>
+<!-- Popup -->
 <div id="pop-bg" style="display:none" class="pop-bg" onclick="closePop()"></div>
 <div class="pop" id="pop" style="display:none"></div>
 <div id="tc"></div>
 
 <script>
 'use strict';
-/* ═══════════════════════════════════════════════════════
-   CONSTANTS & DEFAULTS
-═══════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════
+   CONSTANTS
+════════════════════════════════════════════════════════ */
 const ALL_DAYS=['Dushanba','Seshanba','Chorshanba','Payshanba','Juma','Shanba'];
 const ALL_DAYS_S=['Dush','Sesh','Chor','Pay','Juma','Shan'];
-const DEF_TIMES=[
-  {s:'08:30',e:'09:15'},{s:'09:25',e:'10:10'},{s:'10:20',e:'11:05'},
-  {s:'11:25',e:'12:10'},{s:'12:20',e:'13:05'},{s:'13:15',e:'14:00'},{s:'14:10',e:'14:55'}
-];
+const MORNING_PERIODS=[1,2,3,4];
+const AFTERNOON_PERIODS=[5,6,7,8];
 
-/* ═══════════════════════════════════════════════════════
+// Default period times  (8 periods)
+const DEF_TIMES=[
+  {s:'08:30',e:'09:15'},{s:'09:20',e:'10:05'},{s:'10:10',e:'10:55'},{s:'11:00',e:'11:45'},
+  // period 5-8 afternoon
+  {s:'13:20',e:'14:05'},{s:'14:10',e:'14:55'},{s:'15:00',e:'15:45'},{s:'15:50',e:'16:35'}
+];
+const LUNCH={s:'12:35',e:'13:15',label:'🍽 Tushlik tanaffus'};
+
+const COLORS=['#FF6E00','#6366F1','#10B981','#EC4899','#F59E0B','#EF4444','#06B6D4','#84CC16','#A855F7','#3B82F6','#14B8A6','#F97316'];
+let _ci=0; function nextColor(){return COLORS[_ci++%COLORS.length];}
+
+/* ════════════════════════════════════════════════════════
    DATA MODEL
-   Teacher: { id, name, color, pacing, constraints:{d_p:true},
-              assignments:[{id,subjectName,classId,weeklyHours,isDouble}] }
-   Class:   { id, name, maxPeriods }
-   Settings:{ workDays:[], maxPeriods, periodCount, periodTimes:[{s,e}] }
-   TT:      { classId, day, period, teacherId, asgnId, isDouble }
-═══════════════════════════════════════════════════════ */
+   Subject:  {id, name, color, priority:'core'|'elec'|'fill', shift:'mor'|'aft'|'any'}
+   Teacher:  {id, name, color, pacing:'alt'|'cons', constraints:{d_p:bool}, subjectIds:[]}
+   Class:    {id, name, maxPerDay}
+   Workload: {subjectId, classId, weeklyHours, isDouble}
+   TT entry: {classId, day, period, subjectId, teacherId, isDouble}
+   Settings: {workDays[], maxPeriods, periodCount, periodTimes[], afGap}
+════════════════════════════════════════════════════════ */
 let DB = {
-  teachers:[], classes:[], timetable:[],
-  settings:{
-    workDays:[0,1,2,3,4], maxPeriods:7, periodCount:7,
-    periodTimes: structuredClone(DEF_TIMES)
+  subjects: [],
+  teachers: [],
+  classes:  [],
+  workload: [],   // [{subjectId,classId,weeklyHours,isDouble}]
+  timetable:[],
+  settings: {
+    workDays:[0,1,2,3,4], maxPeriods:7, periodCount:8,
+    periodTimes: JSON.parse(JSON.stringify(DEF_TIMES)),
+    afGap: 5  // afternoon passing minutes
   }
 };
 let _nid=1;
-function uid(){return 'i'+(Date.now()%100000000)+(++_nid)}
+function uid(){return 'u'+(Date.now()%100000000)+(++_nid);}
 
-/* ─── PERSIST ── */
-function save(){try{localStorage.setItem('zi2',JSON.stringify({DB,_nid}))}catch{}}
+/* ─── PERSIST ─── */
+function save(){try{localStorage.setItem('zi3',JSON.stringify({DB,_nid}));}catch{}}
 function load(){
   try{
-    const r=localStorage.getItem('zi2');
-    if(!r) return;
-    const p=JSON.parse(r);
-    DB=p.DB; _nid=p._nid||1;
-    if(!DB.settings) DB.settings={workDays:[0,1,2,3,4],maxPeriods:7,periodCount:7,periodTimes:structuredClone(DEF_TIMES)};
-    if(!DB.settings.periodTimes||DB.settings.periodTimes.length<DB.settings.periodCount){
-      while((DB.settings.periodTimes||[]).length<(DB.settings.periodCount||7)) DB.settings.periodTimes.push({s:'',e:''});
-    }
+    const r=localStorage.getItem('zi3'); if(!r) return;
+    const p=JSON.parse(r); DB=p.DB; _nid=p._nid||1;
+    // Migrations
+    if(!DB.subjects) DB.subjects=[];
+    if(!DB.workload) DB.workload=[];
+    if(!DB.settings) DB.settings={workDays:[0,1,2,3,4],maxPeriods:7,periodCount:8,periodTimes:JSON.parse(JSON.stringify(DEF_TIMES)),afGap:5};
+    if(!DB.settings.periodTimes) DB.settings.periodTimes=JSON.parse(JSON.stringify(DEF_TIMES));
+    if(DB.settings.periodTimes.length<8){while(DB.settings.periodTimes.length<8) DB.settings.periodTimes.push({s:'',e:''});}
     if(!DB.settings.workDays) DB.settings.workDays=[0,1,2,3,4];
-    DB.teachers.forEach(t=>{ if(!t.constraints)t.constraints={}; if(!t.assignments)t.assignments=[]; });
-  }catch(e){console.warn(e)}
+    DB.teachers.forEach(t=>{if(!t.constraints)t.constraints={};if(!t.subjectIds)t.subjectIds=[];});
+  }catch(e){console.warn('load',e);}
 }
 
-/* ═══════════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════
    NAVIGATION
-═══════════════════════════════════════════════════════ */
-const PG_META={
-  dash:['Bosh sahifa',"Umumiy ko'rinish"],
-  settings:['Maktab sozlamalari','Dars kunlari · Soat limiti · Qo\'ng\'iroq jadvali'],
-  teachers:["O'qituvchilar",'Boshqaruv, yuklamalar va bandlik'],
-  classes:['Sinflar','Sinflar ro\'yxati'],
-  timetable:['Jadval yaratish','Backtracking + Reshuffle algoritmi'],
-  view:["Ko'rish & Eksport",'Umumiy · Sinf · O\'qituvchi ko\'rinishi']
+════════════════════════════════════════════════════════ */
+const PG={
+  dash:      ['Bosh sahifa','Umumiy statistika va holat'],
+  settings:  ['Maktab Sozlamalari','Dars kunlari · Soatlar · Qo\'ng\'iroq jadvali'],
+  subjects:  ['Fanlar Bazasi','Ustuvorlik va vaqt qismi bilan fan ro\'yxati'],
+  teachers:  ["O'qituvchilar",'Boshqaruv, fanlar va bandlik matritsasi'],
+  classes:   ['Sinflar','Sinflar ro\'yxati va kunlik limitlar'],
+  workload:  ['Soat Yuklamasi','Fan × Sinf matritsasi'],
+  timetable: ['Jadval Yaratish','3-bosqich: Asosiy → Qo\'shimcha → Zaxira'],
+  view:      ["Ko'rish & Eksport",'Umumiy · Sinf · O\'qituvchi ko\'rinishi']
 };
 let CUR='dash';
 
 function nav(p){
-  document.querySelectorAll('.page').forEach(el=>el.classList.remove('on'));
-  document.querySelectorAll('.sb-item[data-p]').forEach(el=>el.classList.remove('on'));
-  const pg=document.getElementById('page-'+p);
-  if(pg) pg.classList.add('on');
-  const ni=document.querySelector(`.sb-item[data-p="${p}"]`);
-  if(ni) ni.classList.add('on');
+  document.querySelectorAll('.page').forEach(e=>e.classList.remove('on'));
+  document.querySelectorAll('.sb-item[data-p]').forEach(e=>e.classList.remove('on'));
+  const pg=document.getElementById('page-'+p); if(pg) pg.classList.add('on');
+  const ni=document.querySelector(`.sb-item[data-p="${p}"]`); if(ni) ni.classList.add('on');
   CUR=p;
-  const[t,s]=PG_META[p]||['',''];
+  const[t,s]=PG[p]||['',''];
   document.getElementById('pg-t').textContent=t;
   document.getElementById('pg-s').textContent=s;
   document.getElementById('pg-acts').innerHTML=`<button class="btn btn-gh btn-sm" onclick="seedDemo()">🎲 Demo</button>`;
-  if(p==='dash') rDash();
-  if(p==='settings') rSettings();
-  if(p==='teachers'){rTeachers();tTabMode==='matrix'&&rMatrix();}
-  if(p==='classes') rClasses();
-  if(p==='timetable') rTTPage();
-  if(p==='view') rView();
+  if(p==='dash')       rDash();
+  if(p==='settings')   rSettings();
+  if(p==='subjects')   {subjTabMode='list';rSubjects();}
+  if(p==='teachers')   {tTabMode='list';rTeachers();}
+  if(p==='classes')    rClasses();
+  if(p==='workload')   rWorkload();
+  if(p==='timetable')  rTTPage();
+  if(p==='view')       rView();
 }
-
 document.getElementById('sb-nav').addEventListener('click',e=>{
-  const item=e.target.closest('[data-p]');
-  if(item) nav(item.dataset.p);
+  const item=e.target.closest('[data-p]'); if(item) nav(item.dataset.p);
 });
 
-/* ═══════════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════
    TOAST
-═══════════════════════════════════════════════════════ */
+════════════════════════════════════════════════════════ */
 function toast(msg,type=''){
   const c=document.getElementById('tc');
   const t=document.createElement('div');
@@ -479,217 +541,262 @@ function toast(msg,type=''){
   setTimeout(()=>t.remove(),3200);
 }
 
-/* ═══════════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════
    MODAL
-═══════════════════════════════════════════════════════ */
-function openM(id){document.getElementById(id).classList.remove('off')}
-function closeM(id){document.getElementById(id).classList.add('off')}
+════════════════════════════════════════════════════════ */
+function openM(id){document.getElementById(id).classList.remove('off');}
+function closeM(id){document.getElementById(id).classList.add('off');}
 
-/* ═══════════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════
    HELPERS
-═══════════════════════════════════════════════════════ */
+════════════════════════════════════════════════════════ */
 function contrast(hex){
-  if(!hex||hex.length<4) return '#000';
-  const rr=parseInt(hex.slice(1,3),16),gg=parseInt(hex.slice(3,5),16),bb=parseInt(hex.slice(5,7),16);
-  return(rr*299+gg*587+bb*114)/1000>145?'#1a1a1a':'#ffffff';
+  if(!hex||hex.length<7) return '#000';
+  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  return(r*299+g*587+b*114)/1000>148?'#1a1a1a':'#fff';
 }
-const COLORS=['#3B82F6','#8B5CF6','#EC4899','#10B981','#F59E0B','#EF4444','#06B6D4','#84CC16','#F97316','#6366F1','#14B8A6','#A855F7','#0EA5E9'];
-let _ci=0;
-function nextColor(){return COLORS[_ci++%COLORS.length]}
+function hex2rgba(hex,a){
+  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  return `rgba(${r},${g},${b},${a})`;
+}
+function getWD(){return [...DB.settings.workDays].sort((a,b)=>a-b);}
+function getPC(){return DB.settings.periodCount||8;}
+function clsMax(cid){const c=DB.classes.find(x=>x.id===cid);return(c&&c.maxPerDay&&c.maxPerDay>0)?c.maxPerDay:DB.settings.maxPeriods||7;}
+function pTime(p){const t=DB.settings.periodTimes[p-1];return(t&&t.s&&t.e)?`${t.s}–${t.e}`:'';} // 1-based
+function isAfternoon(p){return p>=5;}
+function shiftOK(subjectId,p){
+  const s=DB.subjects.find(x=>x.id===subjectId); if(!s) return true;
+  if(s.shift==='mor') return p<=4;
+  if(s.shift==='aft') return p>=5;
+  return true;
+}
+function priOrder(s){return s.priority==='core'?0:s.priority==='elec'?1:2;}
 
-function pTime(p){ // 1-based
-  const t=DB.settings.periodTimes[p-1];
-  return(t&&t.s&&t.e)?`${t.s}–${t.e}`:'';
-}
-function getWD(){return [...DB.settings.workDays].sort((a,b)=>a-b)}
-function getPC(){return DB.settings.periodCount||7}
-function clsMax(cid){
-  const c=DB.classes.find(x=>x.id===cid);
-  return(c&&c.maxPeriods&&c.maxPeriods>0)?c.maxPeriods:DB.settings.maxPeriods||7;
-}
+/* TT Lookups */
+function getEntry(cid,day,per){return DB.timetable.find(e=>e.classId===cid&&e.day===day&&e.period===per)||null;}
+function tBusy(tid,day,per,excCid=null){return DB.timetable.some(e=>e.teacherId===tid&&e.day===day&&e.period===per&&(excCid===null||e.classId!==excCid));}
+function isBlocked(tid,day,per){const t=DB.teachers.find(x=>x.id===tid);return !!(t&&t.constraints&&t.constraints[`${day}_${per}`]);}
+function dayLoad(cid,day){return DB.timetable.filter(e=>e.classId===cid&&e.day===day).length;}
+function tDaysSet(tid){const s=new Set();DB.timetable.filter(e=>e.teacherId===tid).forEach(e=>s.add(e.day));return s;}
+function wlEntry(sid,cid){return DB.workload.find(w=>w.subjectId===sid&&w.classId===cid)||null;}
+function getTeacherForSubject(sid){return DB.teachers.find(t=>(t.subjectIds||[]).includes(sid))||null;}
 
-/* ─── Timetable lookups ── */
-function getEntry(cid,day,per){
-  return DB.timetable.find(e=>e.classId===cid&&e.day===day&&e.period===per)||null;
-}
-function tBusy(tid,day,per,excCid=null){
-  return DB.timetable.some(e=>e.teacherId===tid&&e.day===day&&e.period===per&&(excCid===null||e.classId!==excCid));
-}
-function isBlocked(tid,day,per){
-  const t=DB.teachers.find(x=>x.id===tid);
-  return !!(t&&t.constraints&&t.constraints[`${day}_${per}`]);
-}
-function dayLoadCls(cid,day){
-  return DB.timetable.filter(e=>e.classId===cid&&e.day===day).length;
-}
-function tDaysUsed(tid){
-  const days=new Set();
-  DB.timetable.filter(e=>e.teacherId===tid).forEach(e=>days.add(e.day));
-  return days;
-}
-
-/* ═══════════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════
    DASHBOARD
-═══════════════════════════════════════════════════════ */
+════════════════════════════════════════════════════════ */
 function rDash(){
-  const allAsgn=DB.teachers.flatMap(t=>t.assignments);
-  const totalH=allAsgn.reduce((a,x)=>a+x.weeklyHours,0);
+  const totalWl=DB.workload.reduce((a,w)=>a+w.weeklyHours,0);
   const placed=DB.timetable.length;
-  const pct=totalH>0?Math.round(placed/totalH*100):0;
+  const pct=totalWl>0?Math.round(placed/totalWl*100):0;
   const wd=getWD().map(i=>ALL_DAYS[i]).join(', ')||'—';
-  let rows=allAsgn.map(a=>{
-    const t=DB.teachers.find(x=>x.id===a.teacherId||(x.assignments||[]).includes(a));
-    const teacher=DB.teachers.find(tt=>tt.assignments.some(aa=>aa.id===a.id));
-    const cls=DB.classes.find(x=>x.id===a.classId);
-    const p2=DB.timetable.filter(e=>e.asgnId===a.id).length;
-    const p3=a.weeklyHours>0?Math.round(p2/a.weeklyHours*100):0;
-    return`<div style="margin-bottom:6px">
-      <div style="display:flex;justify-content:space-between;margin-bottom:2px">
-        <span style="font-size:11px"><b>${a.subjectName}</b> <span style="color:var(--g400)">${cls?.name||'?'} · ${teacher?.name||'?'}</span></span>
-        <span style="font-size:10.5px;color:var(--g400)">${p2}/${a.weeklyHours}</span>
+  const coreSubjs=DB.subjects.filter(s=>s.priority==='core').length;
+  let progRows=DB.workload.slice(0,10).map(w=>{
+    const subj=DB.subjects.find(x=>x.id===w.subjectId);
+    const cls=DB.classes.find(x=>x.id===w.classId);
+    const t=getTeacherForSubject(w.subjectId);
+    const p2=DB.timetable.filter(e=>e.subjectId===w.subjectId&&e.classId===w.classId).length;
+    const p3=w.weeklyHours>0?Math.round(p2/w.weeklyHours*100):0;
+    return`<div style="margin-bottom:5px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:1px">
+        <span style="font-size:10.5px"><b>${subj?.name||'?'}</b> <span style="color:var(--g400)">${cls?.name||'?'} · ${t?.name||'—'}</span></span>
+        <span style="font-size:10px;color:var(--g400)">${p2}/${w.weeklyHours}</span>
       </div>
-      <div class="prog"><div class="pf" style="width:${p3}%;background:${teacher?.color||'var(--or)'}"></div></div>
+      <div class="prog"><div class="pf" style="width:${p3}%;background:${t?.color||subj?.color||'var(--or)'}"></div></div>
     </div>`;
   }).join('');
   document.getElementById('page-dash').innerHTML=`
   <div class="stats">
     <div class="stat"><div class="sv">${DB.teachers.length}</div><div class="sl">O'qituvchilar</div></div>
+    <div class="stat"><div class="sv">${DB.subjects.length}</div><div class="sl">Fanlar (${coreSubjs} asosiy)</div></div>
     <div class="stat"><div class="sv">${DB.classes.length}</div><div class="sl">Sinflar</div></div>
-    <div class="stat"><div class="sv">${allAsgn.length}</div><div class="sl">Yuklamalar</div></div>
-    <div class="stat"><div class="sv">${placed}</div><div class="sl">Darslar joylashtirilgan</div></div>
+    <div class="stat"><div class="sv">${DB.workload.length}</div><div class="sl">Yuklamalar</div></div>
+    <div class="stat"><div class="sv">${placed}</div><div class="sl">Joylashtirilgan</div></div>
     <div class="stat"><div class="sv" style="font-size:18px">${pct}%</div><div class="sl">Jadval to'ldirilishi</div></div>
   </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
     <div class="card"><div class="ch"><span class="ch-t">⚡ Tizim holati</span></div><div class="cb">
-      <div class="alert ${DB.teachers.length&&DB.classes.length&&allAsgn.length?'as':'aw'}" style="margin-bottom:10px">
-        ${DB.teachers.length&&DB.classes.length&&allAsgn.length?'✅ Jadval yaratishga tayyor':'⚠️ O\'qituvchi, sinf va yuklamalar kiriting'}
+      <div class="alert ${DB.teachers.length&&DB.classes.length&&DB.workload.length?'as':'aw'}" style="margin-bottom:9px">
+        ${DB.teachers.length&&DB.classes.length&&DB.workload.length?'✅ 3-bosqichli jadval yaratishga tayyor':'⚠️ Ma\'lumotlarni to\'ldiring'}
       </div>
-      <div style="font-size:11.5px;color:var(--g500);line-height:1.9">
+      <div style="font-size:11px;color:var(--g500);line-height:2">
         📅 Dars kunlari: <b>${wd}</b><br>
         ⏱ Kunlik max: <b>${DB.settings.maxPeriods} soat</b><br>
-        🔀 Kunora: <b>${DB.teachers.filter(t=>t.pacing==='alternate').length} ta o'qituvchi</b><br>
-        📚 2-soat: <b>${allAsgn.filter(a=>a.isDouble).length} ta fan</b>
+        🌅 1-qism: 1–4 soat (tushlikgacha)<br>
+        🌆 2-qism: 5–8 soat (tushlikdan keyin)<br>
+        🔀 Kunora: <b>${DB.teachers.filter(t=>t.pacing==='alt').length} ta o'qituvchi</b>
       </div>
     </div></div>
     <div class="card"><div class="ch"><span class="ch-t">📋 Jadval holati</span></div><div class="cb">
-      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-        <span style="font-size:11.5px;font-weight:600">Umumiy progress</span>
-        <b style="font-size:12px;color:var(--or)">${pct}%</b>
+      <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+        <span style="font-size:11px;font-weight:600">Umumiy progress</span>
+        <b style="font-size:11.5px;color:var(--or)">${pct}%</b>
       </div>
-      <div class="prog" style="height:6px;margin-bottom:12px"><div class="pf" style="width:${pct}%;background:var(--or)"></div></div>
-      ${rows||'<p style="font-size:11.5px;color:var(--g400)">Yuklamalar yo\'q</p>'}
+      <div class="prog" style="height:6px;margin-bottom:11px"><div class="pf" style="width:${pct}%;background:var(--or)"></div></div>
+      ${progRows||'<p style="font-size:11px;color:var(--g400)">Yuklamalar yo\'q</p>'}
     </div></div>
   </div>`;
 }
 
-/* ═══════════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════
    SETTINGS
-═══════════════════════════════════════════════════════ */
+════════════════════════════════════════════════════════ */
 function rSettings(){
-  const s=DB.settings, pc=getPC();
-  const dHtml=ALL_DAYS.map((d,i)=>`
-    <label class="dchk ${s.workDays.includes(i)?'on':''}" id="dchk-${i}">
+  const s=DB.settings; const pc=getPC();
+  const dH=ALL_DAYS.map((d,i)=>`
+    <label class="dchk ${s.workDays.includes(i)?'on':''}" id="dchk${i}">
       <input type="checkbox" ${s.workDays.includes(i)?'checked':''} onchange="toggleDay(${i},this)"/>${d}
     </label>`).join('');
-  const tHtml=Array.from({length:pc},(_,i)=>{
+  const tH=Array.from({length:pc},(_,i)=>{
     const t=s.periodTimes[i]||{s:'',e:''};
-    return`<div class="pt-row">
-      <span class="pt-lbl">${i+1}-soat</span>
-      <input type="time" value="${t.s}" style="font-size:12px" onchange="savePT(${i},'s',this.value)"/>
-      <span style="text-align:center;font-size:11px;color:var(--g400)">–</span>
-      <input type="time" value="${t.e}" style="font-size:12px" onchange="savePT(${i},'e',this.value)"/>
+    const isMor=i<4, isAft=i>=4;
+    return`<div class="pt-grid">
+      <span style="font-size:10.5px;font-weight:700;color:var(--br)">${i+1}-soat${isMor?'<span style="font-size:8px;color:var(--blu);margin-left:3px">☀️</span>':isAft?'<span style="font-size:8px;color:var(--yel);margin-left:3px">🌆</span>':''}</span>
+      <input type="time" value="${t.s}" style="font-size:11.5px" onchange="savePT(${i},'s',this.value)"/>
+      <span style="text-align:center;font-size:10px;color:var(--g400)">–</span>
+      <input type="time" value="${t.e}" style="font-size:11.5px" onchange="savePT(${i},'e',this.value)"/>
     </div>`;
   }).join('');
   document.getElementById('page-settings').innerHTML=`
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:900px">
-    <div class="card">
-      <div class="ch"><span class="ch-t">📅 Dars kunlari</span></div>
-      <div class="cb">
-        <p style="font-size:11.5px;color:var(--g500);margin-bottom:10px">Maktabda dars bo'ladigan kunlar:</p>
-        <div class="dchks">${dHtml}</div>
-        <div class="sep"></div>
-        <div class="alert ai">Faqat tanlangan kunlarga dars joylashtiriladi</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:900px">
+    <div class="card"><div class="ch"><span class="ch-t">📅 Dars kunlari</span></div><div class="cb">
+      <p style="font-size:11.5px;color:var(--g500);margin-bottom:8px">Maktabda dars bo'ladigan kunlar:</p>
+      <div class="dchks">${dH}</div>
+      <div class="sep"></div>
+      <div class="alert ai">Faqat tanlangan kunlarga dars joylashtiriladi</div>
+    </div></div>
+    <div class="card"><div class="ch"><span class="ch-t">⏱ Soat limiti</span></div><div class="cb">
+      <label class="fl">Umumiy kunlik max dars soati</label>
+      <input type="number" value="${s.maxPeriods}" min="1" max="12"
+        onchange="DB.settings.maxPeriods=parseInt(this.value)||7;save();toast('Saqlandi','ok')"/>
+      <div class="sep"></div>
+      <label class="fl">Period soni (1–12)</label>
+      <input type="number" value="${pc}" min="1" max="12"
+        onchange="DB.settings.periodCount=parseInt(this.value)||8;while(DB.settings.periodTimes.length<DB.settings.periodCount)DB.settings.periodTimes.push({s:'',e:''});save();rSettings();toast('Saqlandi','ok')"/>
+      <div class="sep"></div>
+      <label class="fl">Tushlik tanaffuslari: <b style="color:var(--or)">${LUNCH.s} – ${LUNCH.e}</b></label>
+      <div class="alert aw" style="margin-top:6px">1-qism (1–4 soat) · Tushlik · 2-qism (5–8 soat)</div>
+    </div></div>
+    <div class="card" style="grid-column:1/-1"><div class="ch">
+      <span class="ch-t">🔔 Qo'ng'iroq jadvali (${pc} period)</span>
+      <button class="btn btn-gh btn-sm" onclick="resetTimes()">↺ Standart</button>
+    </div><div class="cb">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 20px">${tH}</div>
+    </div></div>
+    <div class="card" style="grid-column:1/-1"><div class="ch"><span class="ch-t">💾 Ma'lumotlar zaxirasi</span></div><div class="cb">
+      <div class="row">
+        <button class="btn btn-br" onclick="expJSON()">⬇ JSON</button>
+        <label class="btn btn-gh" style="cursor:pointer">⬆ JSON yuklash<input type="file" accept=".json" onchange="impJSON(this)" style="display:none"/></label>
+        <button class="btn btn-red" onclick="resetAll()">🗑 Hammasini o'chirish</button>
       </div>
-    </div>
-    <div class="card">
-      <div class="ch"><span class="ch-t">⏱ Kunlik soat limiti</span></div>
-      <div class="cb">
-        <label class="fl">Umumiy maksimal dars soati / kun</label>
-        <input type="number" value="${s.maxPeriods}" min="1" max="12"
-          onchange="DB.settings.maxPeriods=parseInt(this.value)||7;save();toast('Saqlandi','ok')"/>
-        <div class="sep"></div>
-        <label class="fl">Jadvaldagi period soni (1–12)</label>
-        <input type="number" value="${pc}" min="1" max="12"
-          onchange="DB.settings.periodCount=parseInt(this.value)||7;while(DB.settings.periodTimes.length<DB.settings.periodCount)DB.settings.periodTimes.push({s:'',e:''});save();rSettings();toast('Saqlandi','ok')"/>
-        <div class="alert aw" style="margin-top:10px">Har sinf uchun alohida limit → Sinflar sahifasida</div>
-      </div>
-    </div>
-    <div class="card" style="grid-column:1/-1">
-      <div class="ch">
-        <span class="ch-t">🔔 Qo'ng'iroq jadvali</span>
-        <button class="btn btn-gh btn-sm" onclick="resetTimes()">↺ Standart</button>
-      </div>
-      <div class="cb">
-        <p style="font-size:11.5px;color:var(--g500);margin-bottom:10px">Har dars soatining boshlanish va tugash vaqti:</p>
-        ${tHtml}
-      </div>
-    </div>
-    <div class="card" style="grid-column:1/-1">
-      <div class="ch"><span class="ch-t">💾 Ma'lumotlar zaxirasi</span></div>
-      <div class="cb">
-        <div class="row">
-          <button class="btn btn-br" onclick="expJSON()">⬇ JSON yuklab olish</button>
-          <label class="btn btn-gh" style="cursor:pointer">⬆ JSON yuklash<input type="file" accept=".json" onchange="impJSON(this)" style="display:none"/></label>
-          <button class="btn btn-red" onclick="resetAll()">🗑 Hammasini o'chirish</button>
-        </div>
-      </div>
-    </div>
+    </div></div>
   </div>`;
 }
-
-function toggleDay(idx,el){
-  const has=DB.settings.workDays.includes(idx);
-  if(has){
-    if(DB.settings.workDays.length<=1){toast('Kamida 1 kun bo\'lishi kerak','err');el.checked=true;return;}
-    DB.settings.workDays=DB.settings.workDays.filter(d=>d!==idx);
-    el.closest('.dchk').classList.remove('on');
-  } else {
-    DB.settings.workDays.push(idx);
-    DB.settings.workDays.sort((a,b)=>a-b);
-    el.closest('.dchk').classList.add('on');
-  }
+function toggleDay(i,el){
+  const has=DB.settings.workDays.includes(i);
+  if(has){if(DB.settings.workDays.length<=1){toast('Kamida 1 kun!','err');el.checked=true;return;}
+    DB.settings.workDays=DB.settings.workDays.filter(d=>d!==i);el.closest('.dchk').classList.remove('on');}
+  else{DB.settings.workDays.push(i);DB.settings.workDays.sort((a,b)=>a-b);el.closest('.dchk').classList.add('on');}
   save();toast('Saqlandi','ok');
 }
-function savePT(i,f,v){
-  if(!DB.settings.periodTimes[i]) DB.settings.periodTimes[i]={s:'',e:''};
-  DB.settings.periodTimes[i][f]=v; save();
-}
-function resetTimes(){
-  if(!confirm('Standart vaqtlarni tiklash?')) return;
-  DB.settings.periodTimes=structuredClone(DEF_TIMES); save(); rSettings(); toast('Tiklandi','ok');
-}
-function expJSON(){
-  const b=new Blob([JSON.stringify({DB,_nid},null,2)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='zi-jadval.json';a.click();
-}
-function impJSON(inp){
-  const f=inp.files[0]; if(!f) return;
-  const fr=new FileReader();
-  fr.onload=e=>{try{const p=JSON.parse(e.target.result);DB=p.DB;_nid=p._nid||1;save();nav(CUR);toast('Yuklandi','ok')}catch{toast('Fayl xato','err')}};
-  fr.readAsText(f);
-}
-function resetAll(){
-  if(!confirm('BARCHA ma\'lumotlar o\'chiriladi!')) return;
-  DB={teachers:[],classes:[],timetable:[],settings:{workDays:[0,1,2,3,4],maxPeriods:7,periodCount:7,periodTimes:structuredClone(DEF_TIMES)}};
-  _nid=1;save();nav('dash');toast('Tozalandi','warn');
-}
+function savePT(i,f,v){if(!DB.settings.periodTimes[i])DB.settings.periodTimes[i]={s:'',e:''};DB.settings.periodTimes[i][f]=v;save();}
+function resetTimes(){if(!confirm('Standart vaqtlarni tiklash?'))return;DB.settings.periodTimes=JSON.parse(JSON.stringify(DEF_TIMES));save();rSettings();toast('Tiklandi','ok');}
+function expJSON(){const b=new Blob([JSON.stringify({DB,_nid},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='zi-jadval.json';a.click();}
+function impJSON(inp){const f=inp.files[0];if(!f)return;const fr=new FileReader();fr.onload=e=>{try{const p=JSON.parse(e.target.result);DB=p.DB;_nid=p._nid||1;save();nav(CUR);toast('Yuklandi','ok');}catch{toast('Fayl xato','err');}};fr.readAsText(f);}
+function resetAll(){if(!confirm('BARCHA ma\'lumotlar o\'chiriladi!'))return;DB={subjects:[],teachers:[],classes:[],workload:[],timetable:[],settings:{workDays:[0,1,2,3,4],maxPeriods:7,periodCount:8,periodTimes:JSON.parse(JSON.stringify(DEF_TIMES)),afGap:5}};_nid=1;save();nav('dash');toast('Tozalandi','warn');}
 
-/* ═══════════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════
+   SUBJECTS
+════════════════════════════════════════════════════════ */
+let subjTabMode='list';
+function subjTab(t){
+  subjTabMode=t;
+  document.querySelectorAll('#subj-tabs .tab').forEach((b,i)=>b.classList.toggle('on',i===(t==='list'?0:1)));
+  rSubjects();
+}
+function openSM(id){
+  document.getElementById('m-s-ti').textContent=id?'Fanni tahrirlash':'Fan qo\'shish';
+  document.getElementById('s-eid').value=id||'';
+  if(id){const s=DB.subjects.find(x=>x.id===id);document.getElementById('s-n').value=s.name;document.getElementById('s-c').value=s.color;document.getElementById('s-pri').value=s.priority;document.getElementById('s-sh').value=s.shift;}
+  else{document.getElementById('s-n').value='';document.getElementById('s-c').value=nextColor();document.getElementById('s-pri').value='core';document.getElementById('s-sh').value='any';}
+  openM('m-s');
+}
+function saveSubject(){
+  const name=document.getElementById('s-n').value.trim();
+  if(!name){toast('Fan nomi kiritilmadi','err');return;}
+  const id=document.getElementById('s-eid').value;
+  const obj={id:id||uid(),name,color:document.getElementById('s-c').value,priority:document.getElementById('s-pri').value,shift:document.getElementById('s-sh').value};
+  if(id){DB.subjects[DB.subjects.findIndex(x=>x.id===id)]=obj;}
+  else DB.subjects.push(obj);
+  save();closeM('m-s');rSubjects();toast('Saqlandi','ok');
+}
+function delSubject(id){
+  if(!confirm('O\'chirish?'))return;
+  DB.subjects=DB.subjects.filter(s=>s.id!==id);
+  DB.workload=DB.workload.filter(w=>w.subjectId!==id);
+  DB.timetable=DB.timetable.filter(e=>e.subjectId!==id);
+  DB.teachers.forEach(t=>{t.subjectIds=t.subjectIds.filter(s=>s!==id);});
+  save();rSubjects();toast('O\'chirildi','warn');
+}
+const PRI_LABEL={core:'⭐ Asosiy',elec:'📘 Qo\'shimcha',fill:'◦ Zaxira'};
+const PRI_CSS={core:'pri-core',elec:'pri-elec pri-dot-fill',fill:'pri-fill'};
+const SHF_LABEL={mor:'☀️ 1-qism',aft:'🌆 2-qism',any:'🔄 Ahamiyatsiz'};
+const SHF_CSS={mor:'shf-mor',aft:'shf-aft',any:'shf-any'};
+function rSubjects(){
+  const pane=document.getElementById('subj-pane');
+  if(subjTabMode==='add'){
+    pane.innerHTML=`<div class="card" style="max-width:440px"><div class="cb">
+      <div class="fg fg2" style="gap:9px;margin-bottom:9px">
+        <div><label class="fl">Fan nomi *</label><input id="qs-n" type="text" placeholder="Matematika" onkeydown="if(event.key==='Enter')quickAddSubj()"/></div>
+        <div><label class="fl">Rang</label><input id="qs-c" type="color" value="${nextColor()}" style="width:100%;height:32px"/></div>
+      </div>
+      <div class="fg fg2" style="gap:9px;margin-bottom:9px">
+        <div><label class="fl">Ustuvorlik</label>
+          <select id="qs-pri"><option value="core">⭐ Asosiy</option><option value="elec">📘 Qo'shimcha</option><option value="fill">◦ Zaxira</option></select>
+        </div>
+        <div><label class="fl">Qism</label>
+          <select id="qs-sh"><option value="any">🔄 Ahamiyatsiz</option><option value="mor">☀️ 1-qism</option><option value="aft">🌆 2-qism</option></select>
+        </div>
+      </div>
+      <button class="btn btn-or" onclick="quickAddSubj()">+ Qo'shish</button>
+    </div></div>`;
+    return;
+  }
+  if(!DB.subjects.length){pane.innerHTML='<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><h3>Fan yo\'q</h3><p>"+ Yangi fan" tugmasini bosing</p></div>';return;}
+  const byPri=['core','elec','fill'];
+  let h='<div class="card"><div class="cb" style="padding:0"><table class="stbl"><thead><tr><th>Fan nomi</th><th>Rang</th><th>Ustuvorlik</th><th>Qism</th><th>O\u02BBqituvchi</th><th></th></tr></thead><tbody>';
+  byPri.forEach(pri=>{
+    const subs=DB.subjects.filter(s=>s.priority===pri);
+    if(!subs.length) return;
+    h+=`<tr><td colspan="6" style="background:var(--g50);font-size:10px;font-weight:700;text-transform:uppercase;color:var(--g400);letter-spacing:.07em;padding:5px 10px">${PRI_LABEL[pri]}</td></tr>`;
+    subs.forEach(s=>{
+      const t=getTeacherForSubject(s.id);
+      h+=`<tr>
+        <td><span style="display:inline-flex;align-items:center;gap:6px"><span class="dot" style="background:${s.color}"></span><b>${s.name}</b></span></td>
+        <td><input type="color" value="${s.color}" onchange="updSubjColor('${s.id}',this.value)" style="width:28px;height:22px;padding:1px;border:1px solid var(--g200);border-radius:4px;cursor:pointer"/></td>
+        <td><span class="badge ${PRI_CSS[s.priority]}">${PRI_LABEL[s.priority]}</span></td>
+        <td><span class="badge ${SHF_CSS[s.shift]}">${SHF_LABEL[s.shift]}</span></td>
+        <td style="font-size:11px;color:var(--g500)">${t?`<span class="dot" style="background:${t.color}"></span> ${t.name}`:'—'}</td>
+        <td><button class="btn btn-gh btn-sm" onclick="openSM('${s.id}')">✏️</button> <button class="btn btn-red btn-sm" onclick="delSubject('${s.id}')">🗑</button></td>
+      </tr>`;
+    });
+  });
+  h+='</tbody></table></div></div>';
+  pane.innerHTML=h;
+}
+function quickAddSubj(){
+  const name=document.getElementById('qs-n').value.trim();
+  if(!name){toast('Fan nomi kiritilmadi','err');return;}
+  DB.subjects.push({id:uid(),name,color:document.getElementById('qs-c').value,priority:document.getElementById('qs-pri').value,shift:document.getElementById('qs-sh').value});
+  save();document.getElementById('qs-n').value='';toast('Fan qo\'shildi','ok');rSubjects();
+}
+function updSubjColor(id,c){const s=DB.subjects.find(x=>x.id===id);if(s){s.color=c;save();}}
+
+/* ════════════════════════════════════════════════════════
    TEACHERS
-═══════════════════════════════════════════════════════ */
+════════════════════════════════════════════════════════ */
 let tTabMode='list';
 let matTid=null;
-let _pendingAsgns=[]; // temp assignments in modal
+let _tSubjRows=[];
 
 function tTab(t){
   tTabMode=t;
@@ -700,183 +807,123 @@ function tTab(t){
 }
 
 function openTM(id){
-  document.getElementById('m-t-title').textContent=id?'O\'qituvchini tahrirlash':'O\'qituvchi qo\'shish';
+  document.getElementById('m-t-ti').textContent=id?'O\'qituvchini tahrirlash':'O\'qituvchi qo\'shish';
   document.getElementById('t-eid').value=id||'';
-  _pendingAsgns=[];
-  if(id){
-    const t=DB.teachers.find(x=>x.id===id);
-    document.getElementById('t-n').value=t.name;
-    document.getElementById('t-c').value=t.color;
-    document.getElementById('t-p').value=t.pacing;
-    _pendingAsgns=t.assignments.map(a=>({...a}));
-  } else {
-    document.getElementById('t-n').value='';
-    document.getElementById('t-c').value=nextColor();
-    document.getElementById('t-p').value='alternate';
-    _pendingAsgns=[];
-  }
-  rAsgnRows();
+  if(id){const t=DB.teachers.find(x=>x.id===id);document.getElementById('t-n').value=t.name;document.getElementById('t-c').value=t.color;document.getElementById('t-p').value=t.pacing;_tSubjRows=[...t.subjectIds];}
+  else{document.getElementById('t-n').value='';document.getElementById('t-c').value=nextColor();document.getElementById('t-p').value='alt';_tSubjRows=[];}
+  rTSubjRows();
   openM('m-t');
 }
-
-function addAsgnRow(){
-  _pendingAsgns.push({id:uid(),subjectName:'',classId:'',weeklyHours:4,isDouble:false,teacherId:''});
-  rAsgnRows();
+function addSubjRow(){
+  // Pick first unassigned subject
+  const used=DB.teachers.flatMap(t=>t.subjectIds);
+  const avail=DB.subjects.filter(s=>!used.includes(s.id)&&!_tSubjRows.includes(s.id));
+  const pick=avail[0];
+  if(!pick){toast('Barcha fanlar biriktirilgan','warn');return;}
+  _tSubjRows.push(pick.id);
+  rTSubjRows();
 }
-
-function rAsgnRows(){
-  const wrap=document.getElementById('asgn-rows');
-  if(!_pendingAsgns.length){
-    wrap.innerHTML='<p style="font-size:11.5px;color:var(--g400);padding:8px 0">Yuklamasiz. "Qo\'shish" tugmasini bosing.</p>';
-    return;
-  }
-  const clsOpts=DB.classes.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
-  wrap.innerHTML=_pendingAsgns.map((a,i)=>`
-    <div class="asgn-row" id="ar-${a.id}">
-      <input type="text" value="${a.subjectName}" placeholder="Fan nomi" style="font-size:11.5px" onchange="_pendingAsgns[${i}].subjectName=this.value"/>
-      <select style="font-size:11.5px" onchange="_pendingAsgns[${i}].classId=this.value">
-        <option value="">—Sinf—</option>${clsOpts}
-      </select>
-      <input type="number" value="${a.weeklyHours}" min="1" max="20" style="font-size:11.5px" onchange="_pendingAsgns[${i}].weeklyHours=parseInt(this.value)||1"/>
-      <div style="display:flex;justify-content:center">
-        <input type="checkbox" ${a.isDouble?'checked':''} onchange="_pendingAsgns[${i}].isDouble=this.checked" title="Ketma-ket 2 soat"/>
-      </div>
-      <button class="btn btn-red btn-sm" style="padding:3px 6px" onclick="delAsgn(${i})">✕</button>
+function rTSubjRows(){
+  const wrap=document.getElementById('t-subj-rows');
+  if(!_tSubjRows.length){wrap.innerHTML='<p style="font-size:11px;color:var(--g400);padding:6px 0">Fan biriktirilmagan</p>';return;}
+  const usedByOthers=DB.teachers.filter(t=>t.id!==document.getElementById('t-eid').value).flatMap(t=>t.subjectIds);
+  const opts='<option value="">— Fan tanlang —</option>'+
+    DB.subjects.map(s=>`<option value="${s.id}" ${usedByOthers.includes(s.id)?'disabled style="color:var(--g300)"':''}>${s.name} (${PRI_LABEL[s.priority]})</option>`).join('');
+  wrap.innerHTML=_tSubjRows.map((sid,i)=>`
+    <div style="display:grid;grid-template-columns:1fr 50px;gap:5px;align-items:center;padding:3px 0;border-bottom:1px solid var(--g100)">
+      <select style="font-size:11.5px" onchange="_tSubjRows[${i}]=this.value">${opts}</select>
+      <button class="btn btn-red btn-sm" style="justify-content:center" onclick="_tSubjRows.splice(${i},1);rTSubjRows()">✕</button>
     </div>`).join('');
-  // Re-set select values (can't set via innerHTML)
-  _pendingAsgns.forEach((a,i)=>{
-    const row=wrap.children[i];
-    if(!row) return;
-    const sel=row.querySelectorAll('select')[0];
-    if(sel&&a.classId) sel.value=a.classId;
-  });
+  // Set select values
+  wrap.querySelectorAll('select').forEach((el,i)=>{if(_tSubjRows[i]) el.value=_tSubjRows[i];});
 }
-
-function delAsgn(i){_pendingAsgns.splice(i,1);rAsgnRows();}
-
 function saveTeacher(){
   const name=document.getElementById('t-n').value.trim();
   if(!name){toast('Ism kiritilmadi','err');return;}
+  const subjectIds=_tSubjRows.filter(x=>x&&x.length>0);
   const id=document.getElementById('t-eid').value;
-  // Validate assignments
-  for(const a of _pendingAsgns){
-    if(!a.subjectName.trim()||!a.classId||a.weeklyHours<1){
-      toast('Barcha yuklamalarni to\'ldiring','err');return;
-    }
-  }
-  const obj={
-    id:id||uid(),
-    name,
-    color:document.getElementById('t-c').value,
-    pacing:document.getElementById('t-p').value,
-    constraints:id?(DB.teachers.find(x=>x.id===id)?.constraints||{}):{},
-    assignments:_pendingAsgns.map(a=>({...a,teacherId:id||'PLACEHOLDER'}))
-  };
-  if(!id) obj.assignments.forEach(a=>a.teacherId=obj.id);
-  if(id){
-    const idx=DB.teachers.findIndex(x=>x.id===id);
-    obj.assignments.forEach(a=>a.teacherId=id);
-    // Remove old timetable entries for this teacher's removed assignments
-    const oldAsgIds=DB.teachers[idx].assignments.map(a=>a.id);
-    const newAsgIds=obj.assignments.map(a=>a.id);
-    const removed=oldAsgIds.filter(x=>!newAsgIds.includes(x));
-    DB.timetable=DB.timetable.filter(e=>!removed.includes(e.asgnId));
-    DB.teachers[idx]=obj;
-  } else {
-    obj.assignments.forEach(a=>a.teacherId=obj.id);
-    DB.teachers.push(obj);
-  }
+  const obj={id:id||uid(),name,color:document.getElementById('t-c').value,pacing:document.getElementById('t-p').value,constraints:id?(DB.teachers.find(x=>x.id===id)?.constraints||{}):{},subjectIds};
+  if(id){DB.teachers[DB.teachers.findIndex(x=>x.id===id)]=obj;}
+  else DB.teachers.push(obj);
   save();closeM('m-t');rTeachers();toast('Saqlandi','ok');
 }
-
 function delTeacher(id){
-  if(!confirm('O\'chirish?')) return;
+  if(!confirm('O\'chirish?'))return;
   DB.teachers=DB.teachers.filter(t=>t.id!==id);
   DB.timetable=DB.timetable.filter(e=>e.teacherId!==id);
   save();rTeachers();toast('O\'chirildi','warn');
 }
-
 function rTeachers(){
   const el=document.getElementById('t-list');
-  if(!DB.teachers.length){el.innerHTML='<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><h3>O\'qituvchi yo\'q</h3><p>Qo\'shish tugmasini bosing</p></div>';return;}
+  if(!DB.teachers.length){el.innerHTML='<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><h3>O\'qituvchi yo\'q</h3><p>Qo\'shing</p></div>';return;}
   el.innerHTML='<div class="tgrid">'+DB.teachers.map(t=>{
     const ini=t.name.split(' ').map(w=>w[0]||'').join('').slice(0,2).toUpperCase();
     const bl=Object.keys(t.constraints||{}).length;
+    const subs=DB.subjects.filter(s=>(t.subjectIds||[]).includes(s.id));
     return`<div class="tcard">
       <div class="tc-top">
         <div class="ava" style="background:${t.color}">${ini}</div>
-        <div class="tc-info">
-          <div class="tc-name">${t.name}</div>
-          <div class="tc-meta">${t.assignments.length} yukl · ${bl} blok · <span style="color:var(--or)">${t.pacing==='alternate'?'🔀 Kunora':'📅 Ketma-ket'}</span></div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12.5px;font-weight:700;color:var(--br);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.name}</div>
+          <div style="font-size:10px;color:var(--g400)">${subs.length} fan · ${bl} blok · <span style="color:var(--or)">${t.pacing==='alt'?'🔀 Kunora':'📅 Ketma-ket'}</span></div>
         </div>
-        <div class="row" style="gap:5px">
+        <div class="row" style="gap:4px">
           <button class="btn btn-gh btn-sm" onclick="openTM('${t.id}')">✏️</button>
           <button class="btn btn-red btn-sm" onclick="delTeacher('${t.id}')">🗑</button>
         </div>
       </div>
       <div class="tc-body">
-        <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--g400);letter-spacing:.06em;margin-bottom:5px">Yuklamalar</div>
-        ${t.assignments.length?`
-        <div style="display:grid;grid-template-columns:1fr auto auto;gap:3px 8px;font-size:11px">
-          ${t.assignments.map(a=>{
-            const cls=DB.classes.find(c=>c.id===a.classId);
-            const placed=DB.timetable.filter(e=>e.asgnId===a.id).length;
-            return`<span><b>${a.subjectName}</b> <span style="color:var(--g400)">${cls?.name||'?'}</span></span>
-              <span style="color:var(--or);font-weight:700">${a.weeklyHours}h</span>
-              <span style="color:var(--g400)">${placed}/${a.weeklyHours} ${a.isDouble?'<span class="dbl">2x</span>':''}</span>`;
-          }).join('')}
-        </div>`:'<p style="font-size:11px;color:var(--g400)">Yuklamasiz</p>'}
+        <div style="display:flex;flex-wrap:wrap;gap:3px">
+          ${subs.map(s=>`<span class="badge ${PRI_CSS[s.priority]}" style="background:${s.color}18;color:${s.color};border:1px solid ${s.color}30"><span class="dot" style="background:${s.color}"></span>${s.name}</span>`).join('')||'<span style="font-size:10.5px;color:var(--g400)">Fansiz</span>'}
+        </div>
       </div>
     </div>`;
   }).join('')+'</div>';
 }
 
-/* ─── CONSTRAINT MATRIX ── */
+/* ─── Constraint Matrix ─── */
 function rMatrix(){
   const el=document.getElementById('t-matrix');
   const wd=getWD(); const pc=getPC();
-  const selHtml='<option value="">— O\'qituvchini tanlang —</option>'+
-    DB.teachers.map(t=>`<option value="${t.id}" ${matTid===t.id?'selected':''}>${t.name}</option>`).join('');
-  let matHtml='';
+  const selH='<option value="">— O\'qituvchini tanlang —</option>'+DB.teachers.map(t=>`<option value="${t.id}" ${matTid===t.id?'selected':''}>${t.name}</option>`).join('');
+  let matH='';
   if(matTid){
     const t=DB.teachers.find(x=>x.id===matTid);
     const cons=t?.constraints||{};
-    const days=wd.map(i=>ALL_DAYS[i]);
-    matHtml=`<div class="mx-wrap" style="margin-top:12px"><table class="mx">
-      <thead><tr><th style="text-align:right;min-width:76px">Dars</th>${days.map(d=>`<th>${d}</th>`).join('')}</tr></thead>
+    matH=`<div style="overflow-x:auto;margin-top:11px"><table class="mx">
+      <thead><tr><th style="min-width:70px;text-align:right">Soat</th>${wd.map(i=>`<th>${ALL_DAYS[i]}</th>`).join('')}</tr></thead>
       <tbody>`;
     for(let p=1;p<=pc;p++){
-      matHtml+=`<tr><td class="pl">${p}-soat<small>${pTime(p)}</small></td>`;
+      if(p===5) matH+=`<tr><td colspan="${wd.length+1}" style="background:linear-gradient(135deg,#FFF8DC,#FFEAA0);text-align:center;font-size:9.5px;font-weight:700;color:#8B6914;padding:4px;border:1px solid #F0D060">🍽 Tushlik: ${LUNCH.s} – ${LUNCH.e}</td></tr>`;
+      matH+=`<tr><td class="mxpl">${p}-soat<small>${pTime(p)}</small></td>`;
       wd.forEach(di=>{
         const k=`${di}_${p}`,bl=!!cons[k];
-        matHtml+=`<td><div class="mc ${bl?'bl':''}" onclick="togBlock('${matTid}','${k}',this)"></div></td>`;
+        matH+=`<td><div class="mxc ${bl?'bl':''}" onclick="togBlock('${matTid}','${k}',this)"></div></td>`;
       });
-      matHtml+='</tr>';
+      matH+='</tr>';
     }
-    matHtml+='</tbody></table></div><p style="font-size:10.5px;color:var(--g400);margin-top:6px">Qora xonalar – bloklangan (algoritm bu vaqtlarga dars qo\'ymaydi)</p>';
+    matH+='</tbody></table></div><p style="font-size:10px;color:var(--g400);margin-top:5px">Qora = bloklangan (algoritm bu vaqtlarga dars qo\'ymaydi)</p>';
   }
-  el.innerHTML=`<div class="card"><div class="ch"><span class="ch-t">Bandlik matritsasi</span></div><div class="cb">
-    <label class="fl">O'qituvchini tanlang</label>
-    <select style="max-width:260px" onchange="matTid=this.value;rMatrix()">${selHtml}</select>
-    ${matHtml}
+  el.innerHTML=`<div class="card"><div class="ch"><span class="ch-t">Bandlik Matritsasi</span></div><div class="cb">
+    <div style="max-width:260px"><label class="fl">O'qituvchini tanlang</label>
+    <select onchange="matTid=this.value;rMatrix()">${selH}</select></div>
+    ${matH}
   </div></div>`;
 }
 function togBlock(tid,k,el){
-  const t=DB.teachers.find(x=>x.id===tid);
-  if(!t) return;
+  const t=DB.teachers.find(x=>x.id===tid); if(!t) return;
   if(!t.constraints) t.constraints={};
   if(t.constraints[k]){delete t.constraints[k];el.classList.remove('bl');}
   else{t.constraints[k]=true;el.classList.add('bl');}
   save();
 }
 
-/* ═══════════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════
    CLASSES
-═══════════════════════════════════════════════════════ */
+════════════════════════════════════════════════════════ */
 function openCM(id){
-  document.getElementById('m-c-title').textContent=id?'Sinf tahrirlash':'Sinf qo\'shish';
   document.getElementById('c-eid').value=id||'';
-  if(id){const c=DB.classes.find(x=>x.id===id);document.getElementById('c-n').value=c.name;document.getElementById('c-mp').value=c.maxPeriods||'';}
+  if(id){const c=DB.classes.find(x=>x.id===id);document.getElementById('c-n').value=c.name;document.getElementById('c-mp').value=c.maxPerDay||'';}
   else{document.getElementById('c-n').value='';document.getElementById('c-mp').value='';}
   openM('m-c');
 }
@@ -885,51 +932,113 @@ function saveClass(){
   if(!name){toast('Sinf nomi kiritilmadi','err');return;}
   const mp=parseInt(document.getElementById('c-mp').value)||null;
   const id=document.getElementById('c-eid').value;
-  const obj={id:id||uid(),name,maxPeriods:mp};
+  const obj={id:id||uid(),name,maxPerDay:mp};
   if(id){DB.classes[DB.classes.findIndex(x=>x.id===id)]=obj;}
   else DB.classes.push(obj);
   save();closeM('m-c');rClasses();toast('Saqlandi','ok');
 }
 function delClass(id){
-  if(!confirm('Sinfni o\'chirishni tasdiqlaysizmi?')) return;
+  if(!confirm('O\'chirish?'))return;
   DB.classes=DB.classes.filter(c=>c.id!==id);
+  DB.workload=DB.workload.filter(w=>w.classId!==id);
   DB.timetable=DB.timetable.filter(e=>e.classId!==id);
-  DB.teachers.forEach(t=>{t.assignments=t.assignments.filter(a=>a.classId!==id);});
   save();rClasses();toast('O\'chirildi','warn');
 }
 function rClasses(){
   const g=document.getElementById('cgrid');
-  if(!DB.classes.length){g.innerHTML='<div class="empty" style="grid-column:1/-1"><h3>Sinf yo\'q</h3><p>Qo\'shing</p></div>';return;}
+  if(!DB.classes.length){g.innerHTML='<div class="empty" style="grid-column:1/-1"><h3>Sinf yo\'q</h3></div>';return;}
   g.innerHTML=DB.classes.map(c=>{
-    const asgns=DB.teachers.flatMap(t=>t.assignments.filter(a=>a.classId===c.id));
-    const total=asgns.reduce((s,a)=>s+a.weeklyHours,0);
+    const wls=DB.workload.filter(w=>w.classId===c.id);
+    const total=wls.reduce((s,w)=>s+w.weeklyHours,0);
     const placed=DB.timetable.filter(e=>e.classId===c.id).length;
-    const lim=c.maxPeriods||DB.settings.maxPeriods;
-    return`<div class="ccard">
-      <div class="cnum">${c.name}</div>
-      <div style="font-size:13px;font-weight:700;color:var(--br);margin-bottom:3px">${c.name} sinfi</div>
-      <div style="font-size:10.5px;color:var(--g400);margin-bottom:6px">${asgns.length} fan · ${placed}/${total}h · max ${lim}/kun</div>
-      <div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:8px">
-        ${asgns.map(a=>{const t=DB.teachers.find(tt=>tt.assignments.some(aa=>aa.id===a.id));return`<span class="badge" style="background:${t?.color||'#999'}22;color:${t?.color||'#999'}">${a.subjectName}</span>`;}).join('')||'<span style="font-size:10.5px;color:var(--g400)">Yuklamasiz</span>'}
-      </div>
-      ${total>0?`<div class="prog"><div class="pf" style="width:${Math.round(placed/total*100)}%;background:var(--or)"></div></div>`:''}
-      <div class="row" style="margin-top:8px">
-        <button class="btn btn-gh btn-sm" onclick="openCM('${c.id}')">✏️</button>
-        <button class="btn btn-red btn-sm" onclick="delClass('${c.id}')">🗑</button>
+    const lim=c.maxPerDay||DB.settings.maxPeriods;
+    return`<div class="card" style="padding:0">
+      <div class="cb">
+        <div style="width:42px;height:42px;border-radius:9px;background:var(--or);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;margin-bottom:8px">${c.name}</div>
+        <div style="font-size:12.5px;font-weight:700;color:var(--br);margin-bottom:2px">${c.name} sinfi</div>
+        <div style="font-size:10px;color:var(--g400);margin-bottom:7px">${wls.length} fan · ${placed}/${total}h · max ${lim}/kun</div>
+        ${total>0?`<div class="prog"><div class="pf" style="width:${Math.round(placed/total*100)}%;background:var(--or)"></div></div>`:''}
+        <div class="row" style="margin-top:8px">
+          <button class="btn btn-gh btn-sm" onclick="openCM('${c.id}')">✏️</button>
+          <button class="btn btn-red btn-sm" onclick="delClass('${c.id}')">🗑</button>
+        </div>
       </div>
     </div>`;
   }).join('');
 }
 
-/* ═══════════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════
+   WORKLOAD MATRIX
+════════════════════════════════════════════════════════ */
+function rWorkload(){
+  const wrap=document.getElementById('wl-wrap');
+  if(!DB.subjects.length||!DB.classes.length){
+    wrap.innerHTML='<div class="empty" style="padding:32px"><h3>Avval fan va sinf qo\'shing</h3></div>';return;
+  }
+  const byPri=['core','elec','fill'];
+  let h='<table class="wl-tbl"><thead><tr><th>Fan / Sinf</th>'+DB.classes.map(c=>`<th>${c.name}</th>`).join('')+'<th>Jami</th></tr></thead><tbody>';
+  byPri.forEach(pri=>{
+    const subs=DB.subjects.filter(s=>s.priority===pri);
+    if(!subs.length) return;
+    h+=`<tr><td colspan="${DB.classes.length+2}" style="background:var(--br);color:rgba(255,255,255,.7);font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;padding:4px 8px">${PRI_LABEL[pri]}</td></tr>`;
+    subs.forEach(s=>{
+      const t=getTeacherForSubject(s.id);
+      let rowTotal=0;
+      h+=`<tr><td>
+        <div style="display:flex;align-items:center;gap:5px">
+          <span class="dot" style="background:${s.color}"></span>
+          <div>
+            <div style="font-size:11.5px;font-weight:700">${s.name}</div>
+            <div style="font-size:9.5px;color:var(--g400)">${t?t.name:'—'} · ${SHF_LABEL[s.shift]}</div>
+          </div>
+        </div>
+      </td>`;
+      DB.classes.forEach(c=>{
+        const w=wlEntry(s.id,c.id);
+        const v=w?w.weeklyHours:0;
+        rowTotal+=v;
+        h+=`<td><input class="wl-input" type="number" min="0" max="20" value="${v||''}" placeholder="0" id="wl_${s.id}_${c.id}"/></td>`;
+      });
+      h+=`<td style="font-weight:700;color:var(--or);font-size:11.5px" id="wlrow_${s.id}">${rowTotal||''}</td></tr>`;
+    });
+  });
+  h+='</tbody></table>';
+  wrap.innerHTML=h;
+  // Live totals
+  wrap.querySelectorAll('.wl-input').forEach(inp=>{
+    inp.addEventListener('input',()=>updateWLRowTotal(inp.id.split('_')[1]));
+  });
+}
+function updateWLRowTotal(sid){
+  let t=0;
+  DB.classes.forEach(c=>{const el=document.getElementById(`wl_${sid}_${c.id}`);if(el) t+=parseInt(el.value)||0;});
+  const el=document.getElementById(`wlrow_${sid}`); if(el) el.textContent=t||'';
+}
+function saveWorkload(){
+  DB.workload=[];
+  DB.subjects.forEach(s=>{
+    DB.classes.forEach(c=>{
+      const el=document.getElementById(`wl_${s.id}_${c.id}`);
+      const h=el?parseInt(el.value)||0:0;
+      if(h>0) DB.workload.push({subjectId:s.id,classId:c.id,weeklyHours:h,isDouble:false});
+    });
+  });
+  save();toast(`${DB.workload.length} ta yuklama saqlandi`,'ok');
+  rDash();
+}
+function clearWorkload(){
+  if(!confirm('Barcha yuklamalarni tozalash?'))return;
+  DB.workload=[];DB.timetable=[];save();rWorkload();toast('Tozalandi','warn');
+}
+
+/* ════════════════════════════════════════════════════════
    TIMETABLE PAGE
-═══════════════════════════════════════════════════════ */
+════════════════════════════════════════════════════════ */
 let ttDayF='all';
 let vmMode='master';
 let vmFilter=null;
 
 function rTTPage(){buildDayTabs();rTTGrid();}
-
 function buildDayTabs(){
   const wd=getWD();
   let h=`<button class="tab ${ttDayF==='all'?'on':''}" onclick="setTTDay('all')">Barchasi</button>`;
@@ -941,34 +1050,39 @@ function setTTDay(d){ttDayF=d;buildDayTabs();rTTGrid();}
 function rTTGrid(){
   const wrap=document.getElementById('tt-wrap');
   const wd=getWD(); const pc=getPC();
-  if(!DB.classes.length){wrap.innerHTML='<div class="empty" style="padding:36px"><h3>Avval sinf qo\'shing</h3></div>';return;}
+  if(!DB.classes.length){wrap.innerHTML='<div class="empty" style="padding:32px"><h3>Avval sinf qo\'shing</h3></div>';return;}
   const days=ttDayF==='all'?wd:[parseInt(ttDayF)];
   let html='';
   days.forEach(di=>{
     html+=`<div>
-      <div style="padding:6px 12px;background:var(--or3);border-bottom:1px solid var(--g200)">
-        <b style="font-size:12px;color:var(--br)">${ALL_DAYS[di]}</b>
+      <div style="padding:5px 11px;background:var(--or3);border-bottom:1px solid var(--g200)">
+        <b style="font-size:11.5px;color:var(--br)">${ALL_DAYS[di]}</b>
       </div>
       <div style="overflow-x:auto"><table class="tt">
-        <thead><tr><th>Dars / Vaqt</th>${DB.classes.map(c=>`<th>${c.name}</th>`).join('')}</tr></thead>
+        <thead><tr><th style="min-width:78px">Soat / Vaqt</th>${DB.classes.map(c=>`<th style="min-width:96px">${c.name}</th>`).join('')}</tr></thead>
         <tbody>`;
     for(let p=1;p<=pc;p++){
-      html+=`<tr><td class="pcell">${p}-soat<small>${pTime(p)}</small></td>`;
+      // Lunch separator between period 4 and 5
+      if(p===5){
+        html+=`<tr class="lunch-row"><td>🍽 Tushlik</td><td colspan="${DB.classes.length}">${LUNCH.s} – ${LUNCH.e} &nbsp;·&nbsp; Tushlik tanaffus</td></tr>`;
+      }
+      html+=`<tr><td class="pcell">${p}<small>${pTime(p)}</small></td>`;
       DB.classes.forEach(cls=>{
         const cm=clsMax(cls.id);
-        if(p>cm){html+=`<td><div class="slot lim">max</div></td>`;return;}
+        if(p>cm){html+=`<td><div class="slot lim">limit</div></td>`;return;}
         const e=getEntry(cls.id,di,p);
         if(e){
           const t=DB.teachers.find(x=>x.id===e.teacherId);
-          const a=t?.assignments.find(x=>x.id===e.asgnId);
-          const tc=contrast(t?.color||'#888');
-          html+=`<td style="padding:2px"><div class="slot fill" style="background:${t?.color||'#888'};color:${tc}" onclick="openSlot(event,'${cls.id}',${di},${p})">
-            <span class="s-sub">${a?.subjectName||'?'}${e.isDouble?'<span class="dbl">2x</span>':''}</span>
+          const s=DB.subjects.find(x=>x.id===e.subjectId);
+          const bg=t?.color||s?.color||'#888';
+          const tc=contrast(bg);
+          html+=`<td style="padding:1px"><div class="slot fill" style="background:${bg};color:${tc}" onclick="openSlot(event,'${cls.id}',${di},${p})">
+            <span class="s-sub">${s?.name||'?'}${e.isDouble?'<span class="dbl">2x</span>':''}</span>
             <span class="s-tch">${t?.name||'?'}</span>
             <span class="s-del" onclick="event.stopPropagation();rmEntry('${cls.id}',${di},${p})">✕</span>
           </div></td>`;
         } else {
-          html+=`<td style="padding:2px"><div class="slot emp" onclick="openSlot(event,'${cls.id}',${di},${p})">+</div></td>`;
+          html+=`<td style="padding:1px"><div class="slot emp" onclick="openSlot(event,'${cls.id}',${di},${p})">+</div></td>`;
         }
       });
       html+='</tr>';
@@ -983,29 +1097,38 @@ function rmEntry(cid,day,p){
   save();rTTGrid();if(CUR==='view')rView();
 }
 
-/* ─── SLOT POPUP ── */
+/* Slot popup */
 let popCtx=null;
 function openSlot(evt,cid,day,period){
   evt.stopPropagation();
   popCtx={cid,day,period};
-  const allAsgns=DB.teachers.flatMap(t=>t.assignments.filter(a=>a.classId===cid).map(a=>({...a,teacher:t})));
-  if(!allAsgns.length){toast('Bu sinf uchun yuklamasiz','warn');return;}
   const pop=document.getElementById('pop');
   const cls=DB.classes.find(c=>c.id===cid);
-  let h=`<h4>📅 ${ALL_DAYS[day]} · ${period}-soat (${pTime(period)||'?'}) – ${cls?.name}</h4>`;
-  allAsgns.forEach(a=>{
-    const t=a.teacher;
-    const placed=DB.timetable.filter(e=>e.asgnId===a.id).length;
-    const rem=a.weeklyHours-placed;
-    const busy=tBusy(t.id,day,period,cid);
-    const blk=isBlocked(t.id,day,period);
-    const dis=busy||blk||rem<=0;
-    const why=busy?'(band)':blk?'(blok)':rem<=0?'(to\'ldi)':'';
-    h+=`<div class="popt ${dis?'dis':''}" onclick="placeEntry('${a.id}','${t.id}')">
-      <span class="dot" style="background:${t.color}"></span>
-      <span style="flex:1"><b>${a.subjectName}</b> <span style="font-size:10.5px;color:var(--g400)">${t.name}</span></span>
-      ${dis?`<span style="font-size:10px;color:var(--red)">${why}</span>`:`<span style="font-size:10px;color:var(--g400)">${rem}h</span>`}
-    </div>`;
+  // Gather all subjects that have a workload for this class
+  const wls=DB.workload.filter(w=>w.classId===cid&&w.weeklyHours>0);
+  if(!wls.length){toast('Bu sinf uchun yuklama yo\'q','warn');return;}
+  let h=`<h4>📅 ${ALL_DAYS[day]} · ${period}-soat${pTime(period)?' ('+pTime(period)+')':''} – ${cls?.name}</h4>`;
+  // Group by priority
+  ['core','elec','fill'].forEach(pri=>{
+    const priWls=wls.filter(w=>DB.subjects.find(s=>s.id===w.subjectId)?.priority===pri);
+    if(!priWls.length) return;
+    h+=`<div style="font-size:9px;font-weight:700;text-transform:uppercase;color:var(--g400);margin:4px 0 2px;letter-spacing:.06em">${PRI_LABEL[pri]}</div>`;
+    priWls.forEach(w=>{
+      const subj=DB.subjects.find(s=>s.id===w.subjectId);
+      const t=getTeacherForSubject(w.subjectId);
+      const placed=DB.timetable.filter(e=>e.subjectId===w.subjectId&&e.classId===cid).length;
+      const rem=w.weeklyHours-placed;
+      const busy=t&&tBusy(t.id,day,period,cid);
+      const blk=t&&isBlocked(t.id,day,period);
+      const shiftWrong=!shiftOK(w.subjectId,period);
+      const dis=busy||blk||rem<=0;
+      const why=busy?'(band)':blk?'(blok)':rem<=0?'(to\'ldi)':shiftWrong?'⚠️ qism':'' ;
+      h+=`<div class="popt ${dis?'dis':''}" onclick="placeEntry('${w.subjectId}','${t?.id||''}')">
+        <span class="dot" style="background:${subj?.color}"></span>
+        <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><b>${subj?.name||'?'}</b> <span style="font-size:10px;color:var(--g400)">${t?.name||'—'}</span></span>
+        ${dis?`<span style="font-size:9.5px;color:var(--red)">${why}</span>`:`<span style="font-size:9.5px;color:var(--g400)">${rem}h ${shiftWrong?'⚠️':''}</span>`}
+      </div>`;
+    });
   });
   const cur=getEntry(cid,day,period);
   if(cur){h+=`<div class="popt-sep"></div><div class="popt" onclick="rmEntry('${cid}',${day},${period});closePop()" style="color:var(--red)">✕ O'chirish</div>`;}
@@ -1013,127 +1136,120 @@ function openSlot(evt,cid,day,period){
   pop.style.display='block';
   document.getElementById('pop-bg').style.display='block';
   const r=evt.target.getBoundingClientRect();
-  let top=r.bottom+4, left=r.left;
-  if(top+300>window.innerHeight) top=r.top-310;
-  if(left+230>window.innerWidth) left=window.innerWidth-235;
-  pop.style.top=Math.max(4,top)+'px';
-  pop.style.left=Math.max(4,left)+'px';
+  let top=r.bottom+4,left=r.left;
+  if(top+320>window.innerHeight) top=r.top-330;
+  if(left+226>window.innerWidth) left=window.innerWidth-230;
+  pop.style.top=Math.max(4,top)+'px'; pop.style.left=Math.max(4,left)+'px';
 }
-function closePop(){
-  document.getElementById('pop').style.display='none';
-  document.getElementById('pop-bg').style.display='none';
-  popCtx=null;
-}
-function placeEntry(asgnId,teacherId){
+function closePop(){document.getElementById('pop').style.display='none';document.getElementById('pop-bg').style.display='none';popCtx=null;}
+function placeEntry(subjectId,teacherId){
   if(!popCtx) return;
   const{cid,day,period}=popCtx;
-  // conflict check
-  if(tBusy(teacherId,day,period,cid)){toast('O\'qituvchi bu vaqtda band!','err');closePop();return;}
-  if(isBlocked(teacherId,day,period)){toast('Bu vaqt bloklangan!','err');closePop();return;}
+  if(teacherId&&tBusy(teacherId,day,period,cid)){toast('O\'qituvchi bu vaqtda band!','err');closePop();return;}
+  if(teacherId&&isBlocked(teacherId,day,period)){toast('Bu vaqt bloklangan!','err');closePop();return;}
   DB.timetable=DB.timetable.filter(e=>!(e.classId===cid&&e.day===day&&e.period===period));
-  DB.timetable.push({classId:cid,day,period,teacherId,asgnId,isDouble:false});
+  DB.timetable.push({classId:cid,day,period,subjectId,teacherId,isDouble:false});
   save();closePop();rTTGrid();toast('Joylashtirildi','ok');
 }
 
-/* ═══════════════════════════════════════════════════════
-   GENERATE ALGORITHM  — Backtracking + Reshuffle
-═══════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════
+   3-PASS BACKTRACKING + RESHUFFLE ALGORITHM
+════════════════════════════════════════════════════════ */
 function runGen(){
-  const allAsgns=DB.teachers.flatMap(t=>t.assignments);
-  if(!allAsgns.length||!DB.classes.length){toast('Yuklamalar yoki sinflar yo\'q','err');return;}
+  if(!DB.workload.length||!DB.classes.length){toast('Yuklama yoki sinflar yo\'q','err');return;}
   const btn=document.getElementById('gen-btn');
-  btn.disabled=true;btn.textContent='⏳ Yaratilmoqda…';
+  btn.disabled=true; btn.textContent='⏳ Yaratilmoqda…';
   setTimeout(()=>{
-    try{doGen();}catch(e){toast('Algoritm xatoligi: '+e.message,'err');console.error(e);}
-    btn.disabled=false;btn.textContent='⚡ Yaratish';
+    try{doGen();}catch(e){toast('Algoritm xatosi: '+e.message,'err');console.error(e);}
+    btn.disabled=false; btn.textContent='⚡ Yaratish';
   },30);
 }
 
 function doGen(){
   DB.timetable=[];
   const wd=getWD(); const pc=getPC();
-  const failLog=[]; // per-assignment failure notes
-  const genResult=document.getElementById('gen-result');
-  genResult.innerHTML='';
+  const failLog=[];
 
-  /* Build TASK list. Each task = one slot to fill.
-     For double-periods, we handle them as pairs.
-     Sort by most constrained first (fewer available slots = harder). */
-  const tasks=[];
-  DB.teachers.forEach(t=>{
-    t.assignments.forEach(a=>{
-      let rem=a.weeklyHours;
-      // generate double-period tasks first
-      const doubles=a.isDouble?Math.floor(a.weeklyHours/2):0;
-      for(let i=0;i<doubles&&rem>=2;i++){
-        tasks.push({asgnId:a.id,tid:t.id,cid:a.classId,double:true,subj:a.subjectName,tname:t.name});
-        rem-=2;
-      }
-      for(let i=0;i<rem;i++){
-        tasks.push({asgnId:a.id,tid:t.id,cid:a.classId,double:false,subj:a.subjectName,tname:t.name});
-      }
+  /* ── TASK BUILDER ──
+     Each task = 1 period unit to place.
+     Priority: core=0, elec=1, fill=2
+     Also track isDouble for double-period pairing.              */
+  function buildTasks(priority){
+    const tasks=[];
+    DB.workload.forEach(w=>{
+      const subj=DB.subjects.find(s=>s.id===w.subjectId);
+      if(!subj||subj.priority!==priority) return;
+      const t=getTeacherForSubject(w.subjectId);
+      let rem=w.weeklyHours;
+      // double-period tasks first
+      const dbl=w.isDouble?Math.floor(w.weeklyHours/2):0;
+      for(let i=0;i<dbl&&rem>=2;i++){tasks.push({sid:w.subjectId,tid:t?.id||null,cid:w.classId,double:true,priority});rem-=2;}
+      for(let i=0;i<rem;i++) tasks.push({sid:w.subjectId,tid:t?.id||null,cid:w.classId,double:false,priority});
     });
-  });
-
-  /* Score each task by available slot count (constraint-first heuristic) */
-  function countAvail(task){
-    let c=0;
-    wd.forEach(d=>{
-      for(let p=1;p<=pc;p++){
-        if(canPlace(task,d,p,false)) c++;
-      }
-    });
-    return c;
+    return tasks;
   }
-  tasks.sort((a,b)=>countAvail(a)-countAvail(b));
 
-  /* canPlace: check basic constraints without modifying state */
-  function canPlace(task,day,per,allowReshuf=true){
+  /* ── CANDIDATE SLOT SCORING ── */
+  function scoreSlot(task,d,p){
     const{tid,cid,double}=task;
     const cm=clsMax(cid);
-    if(per>cm) return false;
-    if(double&&per+1>cm) return false;
-    if(isBlocked(tid,day,per)) return false;
-    if(double&&isBlocked(tid,day,per+1)) return false;
-    if(tBusy(tid,day,per)) return false;
-    if(double&&tBusy(tid,day,per+1)) return false;
-    if(getEntry(cid,day,per)) return false;
-    if(double&&getEntry(cid,day,per+1)) return false;
-    // daily class limit
-    const dl=dayLoadCls(cid,day);
-    if(dl>=(double?cm-1:cm)) return false;
-    return true;
-  }
-
-  /* Alternate pacing check: last teaching day for this teacher */
-  function pacingOK(tid,day){
+    if(p>cm) return Infinity;
+    if(double&&p+1>cm) return Infinity;
+    if(double&&p+1>pc) return Infinity;
+    if(tid&&isBlocked(tid,d,p)) return Infinity;
+    if(double&&tid&&isBlocked(tid,d,p+1)) return Infinity;
+    if(getEntry(cid,d,p)) return Infinity;
+    if(double&&getEntry(cid,d,p+1)) return Infinity;
+    // class daily limit
+    const dl=dayLoad(cid,d);
+    if(dl>=(double?cm-1:cm)) return Infinity;
+    // shift constraint
+    if(!shiftOK(task.sid,p)) return Infinity;
+    if(double&&!shiftOK(task.sid,p+1)) return Infinity;
+    // teacher conflict (may be reshuffled): add penalty not infinity
+    let score=0;
+    if(tid&&tBusy(tid,d,p,cid)) score+=100;
+    if(double&&tid&&tBusy(tid,d,p+1,cid)) score+=100;
+    // pacing penalty
     const t=DB.teachers.find(x=>x.id===tid);
-    if(!t||t.pacing!=='alternate') return true;
-    const used=tDaysUsed(tid);
-    if(!used.size) return true;
-    // check no adjacent day used
-    return![day-1,day+1].some(d=>used.has(d));
+    if(t&&t.pacing==='alt'){
+      const used=tDaysSet(tid);
+      if(used.has(d-1)||used.has(d+1)) score+=50;
+    }
+    if(t&&t.pacing==='cons'){
+      const used=tDaysSet(tid);
+      if(used.size>0&&!used.has(d)) score+=10;
+    }
+    // Gap minimization: penalize if teacher has gap
+    if(tid){
+      const tidLessons=DB.timetable.filter(e=>e.teacherId===tid&&e.day===d);
+      if(tidLessons.length>0){
+        const minP=Math.min(...tidLessons.map(e=>e.period));
+        const maxP=Math.max(...tidLessons.map(e=>e.period));
+        if(p>minP&&p<maxP) score-=5; // fill gap = good
+        if(p<minP-1||p>maxP+1) score+=8; // new gap = bad
+      }
+    }
+    return score;
   }
 
-  /* RESHUFFLE: try to move an existing entry to free up (tid, day, per)
-     Returns true if successfully reshuffled */
-  function reshuffle(tid,day,per){
-    // Find the entry that blocks this slot (same teacher, day, period)
-    const blocker=DB.timetable.find(e=>e.teacherId===tid&&e.day===day&&e.period===per);
+  /* ── RESHUFFLE: move an existing entry to free up (tid,d,p) ── */
+  function reshuffle(tid,d,p){
+    const blocker=DB.timetable.find(e=>e.teacherId===tid&&e.day===d&&e.period===p);
     if(!blocker) return false;
-    // Try to find another slot for the blocker
+    const bCid=blocker.classId, bSid=blocker.subjectId;
     for(const nd of wd){
-      if(nd===day) continue;
       for(let np=1;np<=pc;np++){
-        if(np===per&&nd===day) continue;
-        if(isBlocked(blocker.teacherId,nd,np)) continue;
-        if(tBusy(blocker.teacherId,nd,np,blocker.classId)) continue;
-        if(getEntry(blocker.classId,nd,np)) continue;
-        const cm2=clsMax(blocker.classId);
-        if(np>cm2) continue;
-        const dl2=dayLoadCls(blocker.classId,nd);
-        if(dl2>=cm2) continue;
-        // Move blocker to new slot
+        if(nd===d&&np===p) continue;
+        if(getEntry(bCid,nd,np)) continue;
+        if(tid&&isBlocked(tid,nd,np)) continue;
+        if(tid&&tBusy(tid,nd,np,bCid)) continue;
+        const bcm=clsMax(bCid);
+        if(np>bcm) continue;
+        const bdl=dayLoad(bCid,nd);
+        if(bdl>=bcm) continue;
+        if(!shiftOK(bSid,np)) continue;
+        // Move
         const idx=DB.timetable.indexOf(blocker);
         DB.timetable[idx]={...blocker,day:nd,period:np};
         return true;
@@ -1142,195 +1258,222 @@ function doGen(){
     return false;
   }
 
-  /* Place task into state */
-  function place(task,day,per){
-    const{tid,cid,asgnId,double}=task;
-    DB.timetable.push({classId:cid,day,period:per,teacherId:tid,asgnId,isDouble:double});
-    if(double) DB.timetable.push({classId:cid,day,period:per+1,teacherId:tid,asgnId,isDouble:true});
-  }
-
-  /* Main placement loop */
-  tasks.forEach(task=>{
-    const{tid,cid,double,subj,tname}=task;
+  /* ── PLACE TASK ── */
+  function placeTask(task){
+    const{sid,tid,cid,double}=task;
     const cm=clsMax(cid);
-    let placed=false;
-
-    /* Build scored candidate list */
+    // Build all possible (d,p) pairs with scores
     const cands=[];
     wd.forEach(d=>{
       for(let p=1;p<=pc-(double?1:0);p++){
-        if(p>cm-(double?1:0)) continue;
-        if(isBlocked(tid,d,p)) continue;
-        if(double&&isBlocked(tid,d,p+1)) continue;
-        if(getEntry(cid,d,p)) continue;
-        if(double&&getEntry(cid,d,p+1)) continue;
-        const dl=dayLoadCls(cid,d);
-        if(dl>=(double?cm-1:cm)) continue;
-        // Score: 0=perfect, penalty for teacher day conflicts
-        let score=0;
-        if(tBusy(tid,d,p)) score+=10; // needs reshuffle
-        if(double&&tBusy(tid,d,p+1)) score+=10;
-        if(!pacingOK(tid,d)) score+=5;
-        // Gap penalty: prefer days teacher already teaches (consecutive mode) or new days (alternate)
-        const t=DB.teachers.find(x=>x.id===tid);
-        if(t&&t.pacing==='consecutive'){
-          const used=tDaysUsed(tid);
-          if(used.has(d)) score-=2; // prefer same days (group lessons)
-        }
-        cands.push({d,p,score});
+        const sc=scoreSlot(task,d,p);
+        if(sc<Infinity) cands.push({d,p,sc});
       }
     });
-
-    // Sort: lower score first (best first), then alternate pacing, then earlier period
-    cands.sort((a,b)=>{
-      if(a.score!==b.score) return a.score-b.score;
-      const pa=pacingOK(tid,a.d)?0:1, pb=pacingOK(tid,b.d)?0:1;
-      if(pa!==pb) return pa-pb;
-      return a.p-b.p;
-    });
-
-    for(const cand of cands){
-      const{d,p}=cand;
-      let teacherFree=!tBusy(tid,d,p)&&(!double||!tBusy(tid,d,p+1));
-      if(teacherFree){
-        place(task,d,p);placed=true;break;
-      } else {
-        // Try reshuffle
-        const reshuf1=!tBusy(tid,d,p)||reshuffle(tid,d,p);
-        const reshuf2=!double||!tBusy(tid,d,p+1)||reshuffle(tid,d,p+1);
-        if(reshuf1&&reshuf2&&!tBusy(tid,d,p)&&(!double||!tBusy(tid,d,p+1))){
-          // After reshuffle, re-check class slot
-          if(!getEntry(cid,d,p)&&(!double||!getEntry(cid,d,p+1))){
-            place(task,d,p);placed=true;break;
-          }
-        }
+    cands.sort((a,b)=>a.sc-b.sc);
+    for(const{d,p,sc} of cands){
+      // Check if teacher is actually free (score may have included reshuffle penalty)
+      let tFree=!tid||(!tBusy(tid,d,p,cid)&&(!double||!tBusy(tid,d,p+1,cid)));
+      if(!tFree&&sc<Infinity){
+        // Attempt reshuffle
+        const r1=(!tid||!tBusy(tid,d,p,cid))||reshuffle(tid,d,p);
+        const r2=!double||(!tid||!tBusy(tid,d,p+1,cid))||reshuffle(tid,d,p+1);
+        if(r1&&r2) tFree=!tid||(!tBusy(tid,d,p,cid)&&(!double||!tBusy(tid,d,p+1,cid)));
       }
+      if(!tFree) continue;
+      // Final check after possible reshuffles
+      if(getEntry(cid,d,p)) continue;
+      if(double&&getEntry(cid,d,p+1)) continue;
+      if(dayLoad(cid,d)>=(double?cm-1:cm)) continue;
+      // PLACE
+      DB.timetable.push({classId:cid,day:d,period:p,subjectId:sid,teacherId:tid||'',isDouble:double});
+      if(double) DB.timetable.push({classId:cid,day:d,period:p+1,subjectId:sid,teacherId:tid||'',isDouble:true});
+      return true;
     }
+    return false;
+  }
 
-    if(!placed){
-      const cls=DB.classes.find(c=>c.id===cid);
-      failLog.push(`"${subj}" (${cls?.name||cid}) – ${tname}: slot topilmadi. Cheklash matritsasini yoki soat limitini kengaytiring.`);
+  /* ── CONSTRAINT-FIRST SORT: most constrained tasks first ── */
+  function sortByConstraint(tasks){
+    return tasks.sort((a,b)=>{
+      const aSlots=wd.reduce((s,d)=>{let c=0;for(let p=1;p<=pc;p++) if(scoreSlot(a,d,p)<Infinity)c++;return s+c;},0);
+      const bSlots=wd.reduce((s,d)=>{let c=0;for(let p=1;p<=pc;p++) if(scoreSlot(b,d,p)<Infinity)c++;return s+c;},0);
+      return aSlots-bSlots;
+    });
+  }
+
+  /* ── PASS 1: CORE ── */
+  const coreTasks=sortByConstraint(buildTasks('core'));
+  let coreOK=0,coreFail=0;
+  coreTasks.forEach(task=>{
+    if(placeTask(task)) coreOK++;
+    else{
+      coreFail++;
+      const subj=DB.subjects.find(s=>s.id===task.sid);
+      const t=DB.teachers.find(x=>x.id===task.tid);
+      const cls=DB.classes.find(c=>c.id===task.cid);
+      failLog.push({type:'core',teacher:t?.name||'—',subj:subj?.name||'?',cls:cls?.name||'?',msg:'Slot topilmadi'});
     }
   });
 
+  /* ── PASS 2: ELECTIVE ── */
+  const elecTasks=sortByConstraint(buildTasks('elec'));
+  let elecOK=0,elecFail=0;
+  elecTasks.forEach(task=>{
+    // Check class daily max — if breached, skip gracefully
+    const{cid,double}=task;
+    const cm=clsMax(cid);
+    const canFit=getWD().some(d=>dayLoad(cid,d)<(double?cm-1:cm));
+    if(!canFit){elecFail++;return;}
+    if(placeTask(task)) elecOK++;
+    else elecFail++;
+  });
+
+  /* ── PASS 3: FILLER ── */
+  const fillTasks=sortByConstraint(buildTasks('fill'));
+  let fillOK=0;
+  fillTasks.forEach(task=>{
+    const{cid}=task;
+    const cm=clsMax(cid);
+    const canFit=getWD().some(d=>dayLoad(cid,d)<cm);
+    if(!canFit) return;
+    if(placeTask(task)) fillOK++;
+  });
+
+  /* ── RESULT ── */
   save();rTTGrid();rDash();
 
-  /* Show results */
-  const tot=DB.timetable.length;
+  const logEl=document.getElementById('gen-log');
+  const total=DB.timetable.length;
+  let logH='';
   if(failLog.length){
-    genResult.innerHTML=`
-      <div class="fail-log">
-        <h4>⚠️ ${failLog.length} ta fan joylashtirish imkonsiz bo'ldi:</h4>
-        <ul>${failLog.map(m=>`<li>${m}</li>`).join('')}</ul>
-      </div>
-      <div class="alert as" style="margin-bottom:12px">✅ ${tot} ta dars muvaffaqiyatli joylashtirildi</div>`;
-    toast(`${tot} joylashtirildi, ${failLog.length} muammo`,'warn');
-  } else {
-    genResult.innerHTML=`<div class="alert as" style="margin-bottom:12px">✅ Barcha darslar muvaffaqiyatli joylashtirildi! Jami: ${tot} ta</div>`;
-    toast(`✅ ${tot} dars tayyor!`,'ok');
+    logH+=`<div class="fail-wrap">
+      <h4>⚠️ Joylashmagan darslar balansi (${failLog.length} ta)</h4>`;
+    const grouped={};
+    failLog.forEach(f=>{
+      const k=`${f.teacher}|||${f.subj}|||${f.cls}`;
+      grouped[k]=(grouped[k]||0)+1;
+    });
+    logH+=Object.entries(grouped).map(([k,cnt])=>{
+      const[teacher,subj,cls]=k.split('|||');
+      return`<div class="fail-item">
+        <span>👤 <b>${teacher}</b></span>
+        <span>📚 ${subj}</span>
+        <span>🏫 ${cls}</span>
+        <span style="color:var(--red)">−${cnt} soat · Cheklovni kengaytiring</span>
+      </div>`;
+    }).join('');
+    logH+='</div>';
   }
-  setTimeout(()=>{genResult.innerHTML='';},8000);
+  logH+=`<div class="alert as" style="margin-bottom:11px">
+    ✅ Jami <b>${total}</b> dars joylashtirildi &nbsp;|&nbsp;
+    Asosiy: <b>${coreOK}</b> &nbsp;|&nbsp;
+    Qo'shimcha: <b>${elecOK}</b> &nbsp;|&nbsp;
+    Zaxira: <b>${fillOK}</b>
+    ${failLog.length?`&nbsp;|&nbsp; <span style="color:var(--red)">⚠️ ${failLog.length} joylashmadi</span>`:''}
+  </div>`;
+  logEl.innerHTML=logH;
+  setTimeout(()=>{ if(logEl.querySelector('.as')&&!failLog.length) logEl.innerHTML=''; },7000);
+  toast(failLog.length?`${total} joylashtirildi, ${failLog.length} muammo`:`✅ ${total} dars tayyor!`, failLog.length?'warn':'ok');
 }
 
 function clearTT(){
-  if(!confirm('Barcha jadvalni tozalash?')) return;
+  if(!confirm('Barcha jadvalni tozalash?'))return;
   DB.timetable=[];save();rTTGrid();rDash();toast('Tozalandi','warn');
 }
 
-/* ═══════════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════
    VIEW & EXPORT
-═══════════════════════════════════════════════════════ */
+════════════════════════════════════════════════════════ */
 function setVM(m){
-  vmMode=m;vmFilter=null;
+  vmMode=m; vmFilter=null;
   document.querySelectorAll('#v-tabs .tab').forEach((b,i)=>b.classList.toggle('on',['master','class','teacher'].indexOf(m)===i));
   rView();
 }
 function rView(){
-  const fb=document.getElementById('v-filter');
-  const bd=document.getElementById('v-body');
+  const fb=document.getElementById('v-filter'), bd=document.getElementById('v-body');
   if(vmMode==='master'){fb.innerHTML='';rMaster(bd);}
   else if(vmMode==='class'){
-    fb.innerHTML='<span style="font-size:11.5px;font-weight:600;color:var(--g500)">Sinf:</span>'+
+    fb.innerHTML='<span style="font-size:11px;font-weight:600;color:var(--g500)">Sinf:</span>'+
       DB.classes.map(c=>`<button class="btn btn-sm ${vmFilter===c.id?'btn-br':'btn-gh'}" onclick="vmFilter='${c.id}';rView()">${c.name}</button>`).join('');
     rClassV(bd,vmFilter);
   } else {
-    fb.innerHTML='<span style="font-size:11.5px;font-weight:600;color:var(--g500)">O\'qituvchi:</span>'+
+    fb.innerHTML='<span style="font-size:11px;font-weight:600;color:var(--g500)">O\'qituvchi:</span>'+
       DB.teachers.map(t=>`<button class="btn btn-sm ${vmFilter===t.id?'btn-br':'btn-gh'}" style="${vmFilter===t.id?'':'border-left:3px solid '+t.color}" onclick="vmFilter='${t.id}';rView()">${t.name}</button>`).join('');
     rTeacherV(bd,vmFilter);
   }
 }
 
-function rMaster(el){
-  const wd=getWD();const pc=getPC();
-  if(!DB.timetable.length){el.innerHTML='<div class="empty"><h3>Jadval bo\'sh</h3><p>Avval jadval yarating</p></div>';return;}
-  let h='<div id="vx">';
-  wd.forEach(di=>{
-    if(!DB.timetable.some(e=>e.day===di)) return;
-    h+=`<div style="margin-bottom:14px">
-      <div style="font-size:12px;font-weight:800;color:var(--br);padding:5px 0;border-bottom:2px solid var(--or);margin-bottom:6px">${ALL_DAYS[di]}</div>
-      <div style="overflow-x:auto"><table class="tt">
-        <thead><tr><th>Dars</th>${DB.classes.map(c=>`<th>${c.name}</th>`).join('')}</tr></thead><tbody>`;
-    for(let p=1;p<=pc;p++){
-      h+=`<tr><td class="pcell">${p}-soat<small>${pTime(p)}</small></td>`;
-      DB.classes.forEach(cls=>{
-        const e=getEntry(cls.id,di,p);
-        if(e){const t=DB.teachers.find(x=>x.id===e.teacherId);const a=t?.assignments.find(x=>x.id===e.asgnId);const tc=contrast(t?.color||'#888');
-          h+=`<td style="padding:2px"><div style="background:${t?.color};color:${tc};border-radius:6px;padding:4px 6px;font-size:10.5px;font-weight:700;min-height:42px"><div class="s-sub">${a?.subjectName||'?'}${e.isDouble?'<span class="dbl">2x</span>':''}</div><div class="s-tch">${t?.name||''}</div></div></td>`;
-        } else h+=`<td><div style="min-height:42px;background:var(--g50);border-radius:6px;border:1px dashed var(--g200)"></div></td>`;
-      });
-      h+='</tr>';
-    }
-    h+='</tbody></table></div></div>';
-  });
-  h+='</div>';
-  el.innerHTML=h;
-}
-
-function rClassV(el,cid){
-  if(!cid){el.innerHTML='<div class="empty"><p>Sinfni tanlang</p></div>';return;}
-  const cls=DB.classes.find(c=>c.id===cid);
-  const wd=getWD();const pc=getPC();
-  let h=`<div id="vx"><h3 style="font-size:14px;font-weight:800;color:var(--br);margin-bottom:10px">${cls?.name} sinfi – Dars jadvali</h3>
-    <div style="overflow-x:auto"><table class="tt">
-    <thead><tr><th>Dars</th>${wd.map(i=>`<th>${ALL_DAYS[i]}</th>`).join('')}</tr></thead><tbody>`;
+function buildGridHTML(classes,days,pc){
+  let h=`<div style="overflow-x:auto"><table class="tt">
+    <thead><tr><th>Soat</th>${classes.map(c=>`<th>${c.name}</th>`).join('')}</tr></thead><tbody>`;
   for(let p=1;p<=pc;p++){
-    h+=`<tr><td class="pcell">${p}-soat<small>${pTime(p)}</small></td>`;
-    wd.forEach(di=>{
-      const e=getEntry(cid,di,p);
-      if(e){const t=DB.teachers.find(x=>x.id===e.teacherId);const a=t?.assignments.find(x=>x.id===e.asgnId);const tc=contrast(t?.color||'#888');
-        h+=`<td style="padding:2px"><div style="background:${t?.color};color:${tc};border-radius:6px;padding:4px 6px;font-size:10.5px;font-weight:700;min-height:42px"><div>${a?.subjectName||'?'}${e.isDouble?'<span class="dbl">2x</span>':''}</div><div class="s-tch">${t?.name||''}</div></div></td>`;
-      } else h+=`<td><div style="min-height:42px;background:var(--g50);border-radius:6px;border:1px dashed var(--g200)"></div></td>`;
+    if(p===5) h+=`<tr class="lunch-row"><td>🍽 Tushlik</td><td colspan="${classes.length}">${LUNCH.s}–${LUNCH.e} Tushlik tanaffus</td></tr>`;
+    h+=`<tr><td class="pcell">${p}<small>${pTime(p)}</small></td>`;
+    classes.forEach(cls=>{
+      const e=days.length===1?getEntry(cls.id,days[0],p):null;
+      if(e){const t=DB.teachers.find(x=>x.id===e.teacherId);const s=DB.subjects.find(x=>x.id===e.subjectId);const bg=t?.color||s?.color||'#888';const tc=contrast(bg);
+        h+=`<td style="padding:2px"><div style="background:${bg};color:${tc};border-radius:5px;padding:3px 5px;font-size:10.5px;font-weight:700;min-height:40px"><div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s?.name||'?'}${e.isDouble?'<span class="dbl">2x</span>':''}</div><div style="font-size:9.5px;opacity:.75;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t?.name||''}</div></div></td>`;
+      } else h+=`<td><div style="min-height:40px;background:var(--g50);border-radius:5px;border:1px dashed var(--g200)"></div></td>`;
     });
     h+='</tr>';
   }
-  h+='</tbody></table></div></div>';
-  el.innerHTML=h;
+  return h+'</tbody></table></div>';
 }
 
+function rMaster(el){
+  if(!DB.timetable.length){el.innerHTML='<div class="empty"><h3>Jadval bo\'sh</h3><p>Avval yarating</p></div>';return;}
+  const wd=getWD(); const pc=getPC();
+  let h='<div id="vx">';
+  wd.forEach(di=>{
+    if(!DB.timetable.some(e=>e.day===di)) return;
+    h+=`<div style="margin-bottom:13px"><div style="font-size:12px;font-weight:800;color:var(--br);padding:4px 0;border-bottom:2px solid var(--or);margin-bottom:5px">${ALL_DAYS[di]}</div>${buildGridHTML(DB.classes,[di],pc)}</div>`;
+  });
+  el.innerHTML=h+'</div>';
+}
+function rClassV(el,cid){
+  if(!cid){el.innerHTML='<div class="empty"><p>Sinfni tanlang</p></div>';return;}
+  const cls=DB.classes.find(c=>c.id===cid); const pc=getPC(); const wd=getWD();
+  let h=`<div id="vx"><div style="font-size:13.5px;font-weight:800;color:var(--br);margin-bottom:9px">${cls?.name} sinfi – Dars jadvali</div>
+    <div style="overflow-x:auto"><table class="tt">
+    <thead><tr><th>Soat</th>${wd.map(i=>`<th>${ALL_DAYS[i]}</th>`).join('')}</tr></thead><tbody>`;
+  for(let p=1;p<=pc;p++){
+    if(p===5) h+=`<tr class="lunch-row"><td>🍽</td><td colspan="${wd.length}">${LUNCH.s}–${LUNCH.e} Tushlik</td></tr>`;
+    h+=`<tr><td class="pcell">${p}<small>${pTime(p)}</small></td>`;
+    wd.forEach(di=>{
+      const e=getEntry(cid,di,p);
+      if(e){const t=DB.teachers.find(x=>x.id===e.teacherId);const s=DB.subjects.find(x=>x.id===e.subjectId);const bg=t?.color||s?.color||'#888';const tc=contrast(bg);
+        h+=`<td style="padding:2px"><div style="background:${bg};color:${tc};border-radius:5px;padding:3px 5px;font-size:10.5px;font-weight:700;min-height:40px"><div>${s?.name||'?'}${e.isDouble?'<span class="dbl">2x</span>':''}</div><div style="font-size:9.5px;opacity:.75">${t?.name||''}</div></div></td>`;
+      } else h+=`<td><div style="min-height:40px;background:var(--g50);border-radius:5px;border:1px dashed var(--g200)"></div></td>`;
+    });
+    h+='</tr>';
+  }
+  el.innerHTML=h+'</tbody></table></div></div>';
+}
 function rTeacherV(el,tid){
   if(!tid){el.innerHTML='<div class="empty"><p>O\'qituvchini tanlang</p></div>';return;}
   const t=DB.teachers.find(x=>x.id===tid);
   const ents=DB.timetable.filter(e=>e.teacherId===tid).sort((a,b)=>a.day-b.day||a.period-b.period);
   if(!ents.length){el.innerHTML=`<div class="empty"><h3>${t?.name}</h3><p>Dars yo'q</p></div>`;return;}
-  let h=`<div id="vx"><h3 style="font-size:14px;font-weight:800;color:var(--br);margin-bottom:10px">${t?.name} – Shaxsiy jadval</h3>
+  let h=`<div id="vx"><div style="font-size:13.5px;font-weight:800;color:var(--br);margin-bottom:9px">${t?.name} – Shaxsiy jadval</div>
     <table class="vtbl">
-    <thead><tr><th>Kun</th><th>Soat</th><th>Vaqt</th><th>Sinf</th><th>Fan</th></tr></thead><tbody>`;
+    <thead><tr><th>Kun</th><th>Soat</th><th>Vaqt</th><th>Sinf</th><th>Fan</th><th>Turi</th></tr></thead><tbody>`;
   ents.forEach(e=>{
-    const a=t.assignments.find(x=>x.id===e.asgnId);
+    const s=DB.subjects.find(x=>x.id===e.subjectId);
     const cls=DB.classes.find(x=>x.id===e.classId);
     h+=`<tr>
       <td style="font-weight:600">${ALL_DAYS[e.day]}</td>
       <td style="font-weight:700;color:var(--or)">${e.period}-soat</td>
-      <td style="color:var(--g500);font-size:10.5px">${pTime(e.period)}</td>
+      <td style="font-size:10.5px;color:var(--g500)">${pTime(e.period)}</td>
       <td><b>${cls?.name||'?'}</b></td>
-      <td><span style="display:inline-flex;align-items:center;gap:5px"><span class="dot" style="background:${t.color}"></span><b>${a?.subjectName||'?'}</b>${e.isDouble?'<span class="dbl" style="background:var(--or);color:#fff">2x</span>':''}</span></td>
+      <td><span style="display:inline-flex;align-items:center;gap:5px"><span class="dot" style="background:${s?.color||'#888'}"></span><b>${s?.name||'?'}</b>${e.isDouble?'<span class="dbl" style="background:var(--or);color:#fff">2x</span>':''}</span></td>
+      <td>${s?`<span class="badge ${PRI_CSS[s.priority]}">${PRI_LABEL[s.priority]}</span>`:''}</td>
     </tr>`;
   });
-  h+='</tbody></table></div>';
-  el.innerHTML=h;
+  el.innerHTML=h+'</tbody></table></div>';
 }
 
-/* ─── EXPORT ── */
+/* ─── EXPORT ─── */
 async function expPDF(){
   const el=document.getElementById('vx');
   if(!el){toast('Ko\'rinishni tanlang','warn');return;}
@@ -1340,47 +1483,45 @@ async function expPDF(){
     const img=canvas.toDataURL('image/png');
     const{jsPDF}=window.jspdf;
     const pdf=new jsPDF({orientation:canvas.width>canvas.height?'l':'p',unit:'mm',format:'a4'});
-    const w=pdf.internal.pageSize.getWidth();
-    const h=canvas.height*w/canvas.width;
+    const w=pdf.internal.pageSize.getWidth(),h=canvas.height*w/canvas.width;
     pdf.addImage(img,'PNG',0,0,w,h);
     pdf.save('zamaxshariy-jadval.pdf');
     toast('PDF saqlandi','ok');
   }catch(e){toast('PDF xato: '+e.message,'err');}
 }
-
 function expXLS(){
   if(!DB.timetable.length){toast('Jadval bo\'sh','warn');return;}
-  const wb=XLSX.utils.book_new();
-  const wd=getWD();const pc=getPC();
+  const wb=XLSX.utils.book_new(); const wd=getWD(); const pc=getPC();
   if(vmMode==='master'||vmMode==='class'){
-    const cls=vmMode==='class'&&vmFilter?DB.classes.filter(c=>c.id===vmFilter):DB.classes;
-    cls.forEach(c=>{
+    const cls2=vmMode==='class'&&vmFilter?DB.classes.filter(c=>c.id===vmFilter):DB.classes;
+    cls2.forEach(c=>{
       const rows=[['Soat','Vaqt',...wd.map(i=>ALL_DAYS[i])]];
       for(let p=1;p<=pc;p++){
+        if(p===5) rows.push(['— TUSHLIK —',`${LUNCH.s}–${LUNCH.e}`, ...wd.map(()=>'')]);
         const row=[`${p}-soat`,pTime(p)];
         wd.forEach(di=>{
           const e=getEntry(c.id,di,p);
-          if(e){const t=DB.teachers.find(x=>x.id===e.teacherId);const a=t?.assignments.find(x=>x.id===e.asgnId);row.push(`${a?.subjectName||'?'} (${t?.name||'?'})`);}
+          if(e){const s=DB.subjects.find(x=>x.id===e.subjectId);const t=DB.teachers.find(x=>x.id===e.teacherId);row.push(`${s?.name||'?'} (${t?.name||'?'})`);}
           else row.push('');
         });
         rows.push(row);
       }
       const ws=XLSX.utils.aoa_to_sheet(rows);
-      ws['!cols']=[{wch:8},{wch:14},...wd.map(()=>({wch:22}))];
+      ws['!cols']=[{wch:7},{wch:13},...wd.map(()=>({wch:22}))];
       XLSX.utils.book_append_sheet(wb,ws,c.name);
     });
   } else {
     const tlist=vmFilter?DB.teachers.filter(t=>t.id===vmFilter):DB.teachers;
     tlist.forEach(t=>{
       const ents=DB.timetable.filter(e=>e.teacherId===t.id).sort((a,b)=>a.day-b.day||a.period-b.period);
-      const rows=[['Kun','Soat','Vaqt','Sinf','Fan']];
+      const rows=[['Kun','Soat','Vaqt','Sinf','Fan','Turi']];
       ents.forEach(e=>{
-        const a=t.assignments.find(x=>x.id===e.asgnId);
+        const s=DB.subjects.find(x=>x.id===e.subjectId);
         const cls=DB.classes.find(x=>x.id===e.classId);
-        rows.push([ALL_DAYS[e.day],`${e.period}-soat`,pTime(e.period),cls?.name||'?',a?.subjectName||'?']);
+        rows.push([ALL_DAYS[e.day],`${e.period}-soat`,pTime(e.period),cls?.name||'?',s?.name||'?',PRI_LABEL[s?.priority||'core']]);
       });
       const ws=XLSX.utils.aoa_to_sheet(rows);
-      ws['!cols']=[{wch:13},{wch:8},{wch:14},{wch:8},{wch:18}];
+      ws['!cols']=[{wch:13},{wch:7},{wch:13},{wch:7},{wch:18},{wch:14}];
       XLSX.utils.book_append_sheet(wb,ws,t.name.slice(0,30).replace(/[:\\/?\*\[\]]/g,'_'));
     });
   }
@@ -1388,48 +1529,62 @@ function expXLS(){
   toast('Excel saqlandi','ok');
 }
 
-/* ═══════════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════
    DEMO SEED
-═══════════════════════════════════════════════════════ */
+════════════════════════════════════════════════════════ */
 function seedDemo(){
-  if(DB.teachers.length&&!confirm('Demo ma\'lumotlar yuklash (mavjud ma\'lumotlar ustiga)?')) return;
-  DB.timetable=[];DB.teachers=[];DB.classes=[];_nid=1;
-  DB.classes=[
-    {id:'c1',name:'5A',maxPeriods:6},{id:'c2',name:'5B',maxPeriods:6},
-    {id:'c3',name:'6A',maxPeriods:7},{id:'c4',name:'6B',maxPeriods:7},
+  if(DB.teachers.length&&!confirm('Demo ma\'lumotlarni yuklash?')) return;
+  DB={subjects:[],teachers:[],classes:[],workload:[],timetable:[],
+    settings:{workDays:[0,1,2,3,4],maxPeriods:8,periodCount:8,periodTimes:JSON.parse(JSON.stringify(DEF_TIMES)),afGap:5}};
+  _nid=1; _ci=0;
+  // Subjects
+  const subjDefs=[
+    {n:'Matematika',pri:'core',sh:'mor',c:'#3B82F6'},
+    {n:"O'zbek tili",pri:'core',sh:'mor',c:'#10B981'},
+    {n:'Ingliz tili',pri:'core',sh:'any',c:'#6366F1'},
+    {n:'Fizika',pri:'core',sh:'aft',c:'#EF4444'},
+    {n:'Tarix',pri:'elec',sh:'any',c:'#F59E0B'},
+    {n:'Kimyo',pri:'elec',sh:'aft',c:'#84CC16'},
+    {n:'Informatika',pri:'elec',sh:'aft',c:'#EC4899'},
+    {n:'Tarbiya',pri:'fill',sh:'any',c:'#A78BFA'},
+    {n:'Jismoniy',pri:'fill',sh:'any',c:'#6EE7B7'},
   ];
-  const teacherDefs=[
-    {name:'Aziz Karimov',color:'#FF6E00',pacing:'alternate',
-     asgns:[{sn:'Matematika',h:5,d:true},{sn:'Fizika',h:3,d:false}],classes:['c1','c2']},
-    {name:'Malika Yusupova',color:'#6366F1',pacing:'consecutive',
-     asgns:[{sn:"O'zbek tili",h:4,d:true},{sn:'Adabiyot',h:2,d:false}],classes:['c1','c2','c3']},
-    {name:'Bobur Toshmatov',color:'#10B981',pacing:'alternate',
-     asgns:[{sn:'Ingliz tili',h:4,d:false}],classes:['c1','c2','c3','c4']},
-    {name:'Nilufar Rashidova',color:'#EC4899',pacing:'consecutive',
-     asgns:[{sn:'Tarix',h:3,d:false},{sn:'Geografiya',h:2,d:false}],classes:['c3','c4']},
-    {name:'Sardor Xolmatov',color:'#F59E0B',pacing:'alternate',
-     asgns:[{sn:'Informatika',h:2,d:false},{sn:'Kimyo',h:3,d:false}],classes:['c1','c3']},
+  subjDefs.forEach(d=>DB.subjects.push({id:uid(),name:d.n,color:d.c,priority:d.pri,shift:d.sh}));
+  // Classes
+  ['5A','5B','6A','6B'].forEach(n=>DB.classes.push({id:uid(),name:n,maxPerDay:n.startsWith('5')?6:7}));
+  // Teachers
+  const tDefs=[
+    {n:'Aziz Karimov',c:'#FF6E00',p:'alt',subs:['Matematika','Fizika']},
+    {n:'Malika Yusupova',c:'#6366F1',p:'cons',subs:["O'zbek tili"]},
+    {n:'Bobur Toshmatov',c:'#10B981',p:'alt',subs:['Ingliz tili']},
+    {n:'Nilufar Rashidova',c:'#EC4899',p:'cons',subs:['Tarix','Kimyo']},
+    {n:'Sardor Xolmatov',c:'#F59E0B',p:'alt',subs:['Informatika','Tarbiya','Jismoniy']},
   ];
-  teacherDefs.forEach(td=>{
-    const tid=uid();
-    const asgns=[];
-    td.classes.forEach(cid=>{
-      td.asgns.forEach(a=>{
-        asgns.push({id:uid(),subjectName:a.sn,classId:cid,weeklyHours:a.h,isDouble:a.d,teacherId:tid});
-      });
-    });
-    DB.teachers.push({id:tid,name:td.name,color:td.color,pacing:td.pacing,constraints:{},assignments:asgns});
+  tDefs.forEach(td=>{
+    const sids=td.subs.map(sn=>DB.subjects.find(s=>s.name===sn)?.id).filter(Boolean);
+    const t={id:uid(),name:td.n,color:td.c,pacing:td.p,constraints:{},subjectIds:sids};
+    DB.teachers.push(t);
   });
-  // Block a few slots for variety
-  DB.teachers[0].constraints={'0_1':true,'4_7':true};
-  DB.teachers[1].constraints={'3_6':true};
-  DB.settings={workDays:[0,1,2,3,4],maxPeriods:7,periodCount:7,periodTimes:structuredClone(DEF_TIMES)};
-  save();nav('dash');toast('Demo ma\'lumotlar yuklandi!','ok');
+  DB.teachers[0].constraints={'0_1':true,'4_8':true};
+  DB.teachers[1].constraints={'3_7':true,'3_8':true};
+  // Workload
+  const hourMap={
+    'Matematika':{core:5},'O\'zbek tili':{core:4},'Ingliz tili':{core:4},
+    'Fizika':{core:3},'Tarix':{elec:3},'Kimyo':{elec:2},'Informatika':{elec:2},
+    'Tarbiya':{fill:1},'Jismoniy':{fill:2}
+  };
+  DB.subjects.forEach(s=>{
+    DB.classes.forEach(c=>{
+      const h=Object.values(hourMap[s.name]||{})[0]||0;
+      if(h>0) DB.workload.push({subjectId:s.id,classId:c.id,weeklyHours:h,isDouble:s.name==='Matematika'||s.name==="O'zbek tili"});
+    });
+  });
+  save(); nav('dash'); toast('Demo ma\'lumotlar yuklandi!','ok');
 }
 
-/* ═══════════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════
    INIT
-═══════════════════════════════════════════════════════ */
+════════════════════════════════════════════════════════ */
 load();
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){
