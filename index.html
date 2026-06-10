@@ -398,6 +398,11 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
       Ko'rish & Eksport
     </div>
+    <div class="nav-section">Sozlash</div>
+    <div class="nav-item" onclick="navigate('settings')" id="nav-settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Dars vaqtlari
+    </div>
   </nav>
   <div class="sidebar-footer">
     <p>© 2025 Zamaxshariy Izdoshlari</p>
@@ -568,6 +573,30 @@
       <div id="view-content"></div>
     </div>
 
+    <!-- ── PAGE: SETTINGS (DARS VAQTLARI) ── -->
+    <div class="page" id="page-settings">
+      <div class="alert alert-info">
+        ℹ️ Bu yerda har bir dars soatining boshlanish va tugash vaqtini sozlashingiz mumkin. Vaqtlar jadvalda va eksportlarda ko'rinadi.
+      </div>
+      <div class="card" style="max-width:640px">
+        <div class="card-header">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span class="card-title">Qo'ng'iroq jadvali (dars vaqtlari)</span>
+        </div>
+        <div class="card-body">
+          <div id="period-times-editor"></div>
+          <hr class="sep"/>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+            <button class="btn btn-primary" onclick="savePeriodTimes()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+              Vaqtlarni saqlash
+            </button>
+            <button class="btn btn-ghost" onclick="resetPeriodTimes()">↺ Standart vaqtlar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div><!-- /content -->
 </main>
 </div><!-- /app -->
@@ -695,8 +724,25 @@ const STATE = {
   classes: [],
   timetable: [], // {classId, day, period, subjectId, teacherId, isDouble}
   constraints: {}, // teacherId -> {day_period: blocked bool}
+  // Dars vaqtlari (qo'ng'iroq jadvali): har bir period uchun {start, end}
+  periodTimes: [
+    {start:'08:30', end:'09:15'},
+    {start:'09:25', end:'10:10'},
+    {start:'10:20', end:'11:05'},
+    {start:'11:25', end:'12:10'},
+    {start:'12:20', end:'13:05'},
+    {start:'13:15', end:'14:00'},
+    {start:'14:10', end:'14:55'},
+  ],
   nextId: 1,
 };
+
+// Period vaqtini matn ko'rinishida qaytaradi: "08:30 - 09:15"
+function periodTimeLabel(period) {
+  const t = STATE.periodTimes[period - 1];
+  if (!t || !t.start || !t.end) return '';
+  return `${t.start} – ${t.end}`;
+}
 
 const DAYS = ['Dushanba','Seshanba','Chorshanba','Payshanba','Juma','Shanba'];
 const DAYS_SHORT = ['Dush','Sesh','Chor','Pay','Juma','Shan'];
@@ -721,6 +767,7 @@ const PAGE_TITLES = {
   classes: ["Sinflar", "Sinflar ro'yxati"],
   timetable: ["Jadval yaratish", "Avtomatik va qo'lda jadvallash"],
   view: ["Ko'rish & Eksport", "Filtr va eksport moduli"],
+  settings: ["Dars vaqtlari", "Qo'ng'iroq jadvali sozlamalari"],
 };
 function navigate(page) {
   currentPage = page;
@@ -738,6 +785,7 @@ function navigate(page) {
   if (page === 'classes') renderClasses();
   if (page === 'timetable') renderManualGrid();
   if (page === 'view') renderViewPage();
+  if (page === 'settings') renderPeriodTimesEditor();
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -758,10 +806,52 @@ function showToast(msg, type='') {
 }
 
 // ═══════════════════════════════════════════════════════════
-//  MODAL HELPERS
+//  DARS VAQTLARI (PERIOD TIMES) EDITOR
 // ═══════════════════════════════════════════════════════════
-function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
-function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+function renderPeriodTimesEditor() {
+  const el = document.getElementById('period-times-editor');
+  let html = `<div style="display:grid;grid-template-columns:auto 1fr 1fr;gap:10px 14px;align-items:center">
+    <div style="font-size:11px;font-weight:700;color:var(--gray-600)">DARS</div>
+    <div style="font-size:11px;font-weight:700;color:var(--gray-600)">BOSHLANISHI</div>
+    <div style="font-size:11px;font-weight:700;color:var(--gray-600)">TUGASHI</div>`;
+  for (let p = 0; p < PERIODS; p++) {
+    const t = STATE.periodTimes[p] || {start:'', end:''};
+    html += `
+      <div style="font-size:13px;font-weight:700;color:var(--brown);white-space:nowrap">${p+1}-soat</div>
+      <input type="time" id="pt-start-${p}" value="${t.start}" style="width:100%;padding:7px 10px;border:1px solid var(--gray-200);border-radius:8px;font-size:13px"/>
+      <input type="time" id="pt-end-${p}" value="${t.end}" style="width:100%;padding:7px 10px;border:1px solid var(--gray-200);border-radius:8px;font-size:13px"/>`;
+  }
+  html += `</div>`;
+  el.innerHTML = html;
+}
+
+function savePeriodTimes() {
+  for (let p = 0; p < PERIODS; p++) {
+    const start = document.getElementById(`pt-start-${p}`).value;
+    const end = document.getElementById(`pt-end-${p}`).value;
+    STATE.periodTimes[p] = {start, end};
+  }
+  showToast("Dars vaqtlari saqlandi ✓", 'success');
+  // Agar jadval ochiq bo'lsa, yangilab qo'yamiz
+  if (currentPage === 'timetable') renderManualGrid();
+}
+
+function resetPeriodTimes() {
+  if (!confirm("Standart vaqtlarni tiklashni tasdiqlaysizmi?")) return;
+  STATE.periodTimes = [
+    {start:'08:30', end:'09:15'},
+    {start:'09:25', end:'10:10'},
+    {start:'10:20', end:'11:05'},
+    {start:'11:25', end:'12:10'},
+    {start:'12:20', end:'13:05'},
+    {start:'13:15', end:'14:00'},
+    {start:'14:10', end:'14:55'},
+  ];
+  renderPeriodTimesEditor();
+  showToast("Standart vaqtlar tiklandi", 'warn');
+}
+
+
 
 // ═══════════════════════════════════════════════════════════
 //  TEACHER CRUD
@@ -1151,7 +1241,7 @@ function renderManualGrid() {
         </tr></thead>
         <tbody>`;
     for (let p = 1; p <= PERIODS; p++) {
-      html += `<tr><td class="tt-period-cell">${p}-dars</td>`;
+      html += `<tr><td class="tt-period-cell">${p}-dars<br><span style="font-size:9px;font-weight:500;color:var(--brown-light);opacity:.85">${periodTimeLabel(p)}</span></td>`;
       STATE.classes.forEach(cls => {
         const entry = getEntry(cls.id, d, p);
         html += `<td style="padding:3px">`;
@@ -1205,7 +1295,7 @@ function openSlotPopup(evt, classId, day, period) {
   const classSubs = STATE.subjects.filter(s=>s.classId===classId);
   if (!classSubs.length) { showToast("Bu sinf uchun fan yo'q!", 'warn'); return; }
 
-  let html = `<h4>📅 ${DAYS[day]} – ${period}-dars (${STATE.classes.find(c=>c.id===classId)?.name})</h4>`;
+  let html = `<h4>📅 ${DAYS[day]} – ${period}-dars <span style="font-weight:400;color:var(--gray-400)">${periodTimeLabel(period)}</span> (${STATE.classes.find(c=>c.id===classId)?.name})</h4>`;
   const cur = getEntry(classId, day, period);
   if (cur) html += `<div class="alert alert-warn" style="margin-bottom:8px;font-size:11px">✏️ Mavjud darsni o'zgartirish</div>`;
   classSubs.forEach(s => {
@@ -1435,7 +1525,7 @@ function renderMasterView(el) {
         <thead><tr><th>Dars</th>${STATE.classes.map(c=>`<th>${c.name}</th>`).join('')}</tr></thead>
         <tbody>`;
     for (let p=1;p<=PERIODS;p++) {
-      html+=`<tr><td class="tt-period-cell">${p}-dars</td>`;
+      html+=`<tr><td class="tt-period-cell">${p}-dars<br><span style="font-size:9px;font-weight:500;color:var(--brown-light);opacity:.85">${periodTimeLabel(p)}</span></td>`;
       STATE.classes.forEach(cls=>{
         const e=getEntry(cls.id,d,p);
         if(e){const s=STATE.subjects.find(x=>x.id===e.subjectId);const tc=STATE.teachers.find(x=>x.id===e.teacherId);const txc=getContrastColor(s?.color||'#aaa');
@@ -1459,7 +1549,7 @@ function renderClassView(el, classId) {
     <div style="overflow-x:auto"><table class="tt-table">
     <thead><tr><th>Dars</th>${DAYS.map(d=>`<th>${d}</th>`).join('')}</tr></thead><tbody>`;
   for(let p=1;p<=PERIODS;p++){
-    html+=`<tr><td class="tt-period-cell">${p}-dars</td>`;
+    html+=`<tr><td class="tt-period-cell">${p}-dars<br><span style="font-size:9px;font-weight:500;color:var(--brown-light);opacity:.85">${periodTimeLabel(p)}</span></td>`;
     DAYS.forEach((_,d)=>{
       const e=getEntry(classId,d,p);
       if(e){const s=STATE.subjects.find(x=>x.id===e.subjectId);const tc=STATE.teachers.find(x=>x.id===e.teacherId);const txc=getContrastColor(s?.color||'#aaa');
@@ -1482,7 +1572,7 @@ function renderTeacherView(el, teacherId) {
   entries.sort((a,b)=>a.day-b.day||a.period-b.period);
   let html=`<div id="export-target"><h3 style="font-size:16px;font-weight:800;color:var(--brown);margin-bottom:14px">${t?.name} – shaxsiy jadval</h3>
     <table class="teacher-view-table">
-      <thead><tr><th>Kun</th><th>Dars</th><th>Sinf</th><th>Fan</th></tr></thead>
+      <thead><tr><th>Kun</th><th>Dars</th><th>Vaqt</th><th>Sinf</th><th>Fan</th></tr></thead>
       <tbody>`;
   entries.forEach(e=>{
     const s=STATE.subjects.find(x=>x.id===e.subjectId);
@@ -1491,6 +1581,7 @@ function renderTeacherView(el, teacherId) {
     html+=`<tr>
       <td style="font-weight:600">${DAYS[e.day]}</td>
       <td style="font-weight:700;color:var(--orange)">${e.period}-dars</td>
+      <td style="color:var(--gray-600)">${periodTimeLabel(e.period)}</td>
       <td>${cls?.name||'?'}</td>
       <td><span style="display:inline-flex;align-items:center;gap:6px">
         <span style="width:10px;height:10px;border-radius:3px;background:${s?.color};display:inline-block"></span>
@@ -1536,9 +1627,9 @@ function exportExcel() {
       ? STATE.classes.filter(c=>c.id===currentViewFilter)
       : STATE.classes;
     classes.forEach(cls=>{
-      const rows = [['Dars/Kun', ...DAYS]];
+      const rows = [['Dars', 'Vaqt', ...DAYS]];
       for(let p=1;p<=PERIODS;p++){
-        const row = [`${p}-dars`];
+        const row = [`${p}-dars`, periodTimeLabel(p)];
         DAYS.forEach((_,d)=>{
           const e=getEntry(cls.id,d,p);
           if(e){const s=STATE.subjects.find(x=>x.id===e.subjectId);const t=STATE.teachers.find(x=>x.id===e.teacherId);row.push(`${s?.name||'?'} (${t?.name||'?'})`);}
@@ -1547,7 +1638,7 @@ function exportExcel() {
         rows.push(row);
       }
       const ws=XLSX.utils.aoa_to_sheet(rows);
-      ws['!cols']=[{wch:10},...DAYS.map(()=>({wch:22}))];
+      ws['!cols']=[{wch:10},{wch:16},...DAYS.map(()=>({wch:22}))];
       XLSX.utils.book_append_sheet(wb,ws,cls.name);
     });
   } else if (currentViewMode==='teacher') {
@@ -1556,14 +1647,14 @@ function exportExcel() {
       : STATE.teachers;
     teachers.forEach(t=>{
       const entries = STATE.timetable.filter(e=>e.teacherId===t.id).sort((a,b)=>a.day-b.day||a.period-b.period);
-      const rows=[['Kun','Dars','Sinf','Fan']];
+      const rows=[['Kun','Dars','Vaqt','Sinf','Fan']];
       entries.forEach(e=>{
         const s=STATE.subjects.find(x=>x.id===e.subjectId);
         const cls=STATE.classes.find(x=>x.id===e.classId);
-        rows.push([DAYS[e.day],`${e.period}-dars`,cls?.name||'?',s?.name||'?']);
+        rows.push([DAYS[e.day],`${e.period}-dars`,periodTimeLabel(e.period),cls?.name||'?',s?.name||'?']);
       });
       const ws=XLSX.utils.aoa_to_sheet(rows);
-      ws['!cols']=[{wch:14},{wch:10},{wch:10},{wch:18}];
+      ws['!cols']=[{wch:14},{wch:10},{wch:16},{wch:10},{wch:18}];
       const safeName=t.name.slice(0,28).replace(/[:\\\/\?\*\[\]]/g,'_');
       XLSX.utils.book_append_sheet(wb,ws,safeName);
     });
